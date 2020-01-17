@@ -1,6 +1,6 @@
-package com.github.wang.wrpc.context.config;
+package com.github.wang.wrpc.context.registry;
 
-import com.github.wang.wrpc.context.common.ProviderInfo;
+import com.github.wang.wrpc.context.registry.ProviderInfo;
 import lombok.Data;
 
 import java.util.List;

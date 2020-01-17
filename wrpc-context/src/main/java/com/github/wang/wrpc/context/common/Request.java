@@ -15,14 +15,14 @@ public class Request {
 
     private long id;
 
-    private boolean res;//是否响应
+    private boolean isBack;//是否响应
 
     private boolean heartbeat;//是否心跳消息
 
     private Object body;
 
     public Request() {
-        this.res = true;
+        this.isBack = true;
         this.id = newId();
     }
 

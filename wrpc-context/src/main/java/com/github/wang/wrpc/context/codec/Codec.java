@@ -1,4 +1,4 @@
-package com.github.wang.wrpc.context.ext;
+package com.github.wang.wrpc.context.codec;
 
 import com.github.wang.wrpc.common.ext.Spi;
 import io.netty.buffer.ByteBuf;

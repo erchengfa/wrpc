@@ -7,7 +7,7 @@ import com.github.wang.wrpc.context.common.Server;
 import com.github.wang.wrpc.context.config.ProviderConfig;
 import com.github.wang.wrpc.context.config.RegistryConfig;
 import com.github.wang.wrpc.context.config.ServerConfig;
-import com.github.wang.wrpc.context.ext.Registry;
+import com.github.wang.wrpc.context.registry.Registry;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
 

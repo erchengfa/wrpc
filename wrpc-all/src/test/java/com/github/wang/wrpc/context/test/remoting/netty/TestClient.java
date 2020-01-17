@@ -1,7 +1,7 @@
 package com.github.wang.wrpc.context.test.remoting.netty;
 
 import com.github.wang.wrpc.context.common.Invocation;
-import com.github.wang.wrpc.context.common.ProviderInfo;
+import com.github.wang.wrpc.context.registry.ProviderInfo;
 import com.github.wang.wrpc.context.common.Request;
 import com.github.wang.wrpc.context.remoting.DefaultFuture;
 import com.github.wang.wrpc.context.remoting.netty.NettyClient;

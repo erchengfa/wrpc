@@ -1,6 +1,6 @@
 package com.github.wang.wrpc.context.observer;
 
-import com.github.wang.wrpc.context.config.ProviderGroup;
+import com.github.wang.wrpc.context.registry.ProviderGroup;
 
 /**
  * @author : wang

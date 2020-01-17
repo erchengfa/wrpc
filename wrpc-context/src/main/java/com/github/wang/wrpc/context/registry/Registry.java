@@ -1,9 +1,8 @@
-package com.github.wang.wrpc.context.ext;
+package com.github.wang.wrpc.context.registry;
 
 import com.github.wang.wrpc.common.ext.Spi;
 import com.github.wang.wrpc.context.config.ConsumerConfig;
 import com.github.wang.wrpc.context.config.ProviderConfig;
-import com.github.wang.wrpc.context.config.ProviderGroup;
 import com.github.wang.wrpc.context.config.RegistryConfig;
 import com.github.wang.wrpc.context.observer.ProviderObserver;
 

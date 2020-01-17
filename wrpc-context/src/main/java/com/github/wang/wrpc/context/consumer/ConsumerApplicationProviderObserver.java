@@ -1,6 +1,6 @@
 package com.github.wang.wrpc.context.consumer;
 
-import com.github.wang.wrpc.context.config.ProviderGroup;
+import com.github.wang.wrpc.context.registry.ProviderGroup;
 import com.github.wang.wrpc.context.observer.ProviderObserver;
 import lombok.extern.slf4j.Slf4j;
 

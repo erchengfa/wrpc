@@ -3,10 +3,10 @@ package com.github.wang.wrpc.context.remoting.netty;
 
 import com.github.wang.wrpc.common.ext.ServiceLoader;
 import com.github.wang.wrpc.common.ext.ServiceLoaderFactory;
-import com.github.wang.wrpc.context.common.ProviderInfo;
+import com.github.wang.wrpc.context.registry.ProviderInfo;
 import com.github.wang.wrpc.context.common.RpcConstants;
 import com.github.wang.wrpc.context.consumer.RpcClient;
-import com.github.wang.wrpc.context.ext.Codec;
+import com.github.wang.wrpc.context.codec.Codec;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.buffer.PooledByteBufAllocator;
 import io.netty.channel.Channel;

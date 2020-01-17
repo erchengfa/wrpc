@@ -2,9 +2,9 @@ package com.github.wang.wrpc.context.consumer;
 
 import com.github.wang.wrpc.common.exception.RPCRuntimeException;
 import com.github.wang.wrpc.common.utils.ThreadPoolUtils;
-import com.github.wang.wrpc.context.common.ProviderInfo;
+import com.github.wang.wrpc.context.registry.ProviderInfo;
 import com.github.wang.wrpc.context.config.ConsumerConfig;
-import com.github.wang.wrpc.context.config.ProviderGroup;
+import com.github.wang.wrpc.context.registry.ProviderGroup;
 import com.github.wang.wrpc.context.timer.TimerManager;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;

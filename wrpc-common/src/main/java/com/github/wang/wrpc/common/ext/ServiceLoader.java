@@ -8,6 +8,7 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.lang.reflect.Modifier;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
@@ -189,8 +190,16 @@ public class ServiceLoader<T> {
         }
     }
 
-    List<SpiClassInfo<T>> getAllSpiClassInfo(){
-        return (List)spiClassInfoMap.values();
+    public List<T> getInstances(){
+        List<T> list = new ArrayList<>();
+        if (spiClassInfoMap == null){
+            throw new RPCRuntimeException("Not found extension of " + interfaceName);
+        }
+        for (String alia: singleInstanceMap.keySet()){
+            T t = singleInstanceMap.get(alia);
+            list.add(t);
+        }
+        return list;
     }
 
 

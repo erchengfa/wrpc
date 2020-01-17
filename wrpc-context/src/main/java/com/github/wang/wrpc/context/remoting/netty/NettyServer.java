@@ -6,7 +6,7 @@ import com.github.wang.wrpc.common.ext.ServiceLoaderFactory;
 import com.github.wang.wrpc.context.common.Server;
 import com.github.wang.wrpc.context.common.RpcConstants;
 import com.github.wang.wrpc.context.config.ServerConfig;
-import com.github.wang.wrpc.context.ext.Codec;
+import com.github.wang.wrpc.context.codec.Codec;
 import com.github.wang.wrpc.context.remoting.disruptor.EventDisruptor;
 import com.github.wang.wrpc.context.remoting.handler.MessageHandler;
 import io.netty.bootstrap.ServerBootstrap;

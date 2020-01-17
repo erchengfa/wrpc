@@ -1,4 +1,4 @@
-package com.github.wang.wrpc.context.ext;
+package com.github.wang.wrpc.context.serializer;
 
 
 import com.github.wang.wrpc.common.ext.Spi;

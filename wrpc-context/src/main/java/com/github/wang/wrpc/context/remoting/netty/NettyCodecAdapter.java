@@ -1,6 +1,6 @@
 package com.github.wang.wrpc.context.remoting.netty;
 
-import com.github.wang.wrpc.context.ext.Codec;
+import com.github.wang.wrpc.context.codec.Codec;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;

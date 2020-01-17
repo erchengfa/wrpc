@@ -1,6 +1,6 @@
 package com.github.wang.wrpc.serialization.test;
 
-import com.github.wang.wrpc.context.ext.Serializer;
+import com.github.wang.wrpc.context.serializer.Serializer;
 import com.github.wang.wrpc.serialization.kryo.kryoSerializer;
 import org.junit.Test;
 

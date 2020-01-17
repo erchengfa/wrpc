@@ -7,15 +7,12 @@ import com.github.wang.wrpc.context.config.ConsumerConfig;
 import com.github.wang.wrpc.context.config.ProviderConfig;
 import com.github.wang.wrpc.context.config.RegistryConfig;
 import com.github.wang.wrpc.context.config.ServerConfig;
-import com.github.wang.wrpc.context.ext.Registry;
+import com.github.wang.wrpc.context.registry.Registry;
 import com.github.wang.wrpc.context.test.service.DemoServiceImpl;
 import com.github.wang.wrpc.context.test.service.IDemoService;
-import com.google.common.eventbus.EventBus;
 import org.junit.Test;
 
 import java.io.IOException;
-import java.util.HashSet;
-import java.util.Set;
 
 /**
  * @author : wang

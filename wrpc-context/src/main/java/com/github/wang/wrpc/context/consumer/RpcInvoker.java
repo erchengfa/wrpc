@@ -2,6 +2,7 @@ package com.github.wang.wrpc.context.consumer;
 
 import com.github.wang.wrpc.context.common.*;
 import com.github.wang.wrpc.context.config.ConsumerConfig;
+import com.github.wang.wrpc.context.registry.ProviderInfo;
 import com.github.wang.wrpc.context.remoting.DefaultFuture;
 import com.github.wang.wrpc.context.remoting.netty.NettyClient;
 import lombok.extern.slf4j.Slf4j;

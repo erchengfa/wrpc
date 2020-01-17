@@ -4,7 +4,7 @@ import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryo.io.Input;
 import com.esotericsoftware.kryo.io.Output;
 import com.github.wang.wrpc.context.common.SerializationConstants;
-import com.github.wang.wrpc.context.ext.Serializer;
+import com.github.wang.wrpc.context.serializer.Serializer;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;

@@ -1,4 +1,4 @@
-package com.github.wang.wrpc.context.common;
+package com.github.wang.wrpc.context.registry;
 
 import com.github.wang.wrpc.context.config.RpcDefaultConfig;
 import lombok.Data;

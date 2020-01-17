@@ -4,11 +4,11 @@ import com.github.wang.wrpc.common.ext.ServiceLoader;
 import com.github.wang.wrpc.common.ext.ServiceLoaderFactory;
 import com.github.wang.wrpc.common.utils.BitUtil;
 import com.github.wang.wrpc.common.utils.BytesUtils;
-
+import com.github.wang.wrpc.context.codec.Codec;
 import com.github.wang.wrpc.context.common.Request;
 import com.github.wang.wrpc.context.common.Response;
-import com.github.wang.wrpc.context.ext.Codec;
-import com.github.wang.wrpc.context.ext.Serializer;
+import com.github.wang.wrpc.context.serializer.Serializer;
+import com.github.wang.wrpc.context.serializer.SerializerUtils;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 
@@ -29,7 +29,7 @@ public class WangCodec implements Codec {
 
     protected static final byte FLAG_REQUEST = (byte) 0x80;
     protected static final byte FLAG_HEARTBEAT = (byte) 0x40;
-
+    protected static final byte FLAG_BACK = (byte) 0x20;
     protected static Serializer serializer = null;
 
     private String serialization;
@@ -51,6 +51,9 @@ public class WangCodec implements Codec {
             header[2] = (byte) (FLAG_REQUEST | serializer.getContentTypeId());
             if (req.isHeartbeat()) {
                 header[2] |= FLAG_HEARTBEAT;
+            }
+            if (req.isBack()){
+                header[2] |= FLAG_BACK;
             }
             // set request id.
             BytesUtils.long2bytes(req.getId(), header, 3);
@@ -110,6 +113,7 @@ public class WangCodec implements Codec {
             byte flag = header[2];
             int res = BitUtil.getBit(flag, 7);
             int heartbeat = BitUtil.getBit(flag, 6);
+            byte serializeId = (byte)BitUtil.getBits(flag, 0,4);
             // 消息i
             long id = BytesUtils.bytes2long(header, 3);
             // 消息长度
@@ -123,13 +127,19 @@ public class WangCodec implements Codec {
             // 至此，读到一条完整报文
             byte[] body = new byte[length];
             in.readBytes(body);
+            Serializer decodeSerializer = SerializerUtils.getSerializer(serializeId);
             if (res == 1){
                 Request request = new Request(id);
                 if (heartbeat == 1){
                     request.setHeartbeat(true);
                 }
+
                 if (!request.isHeartbeat()){
-                    Object requestBody = serializer.deserialize(body);
+                    int back = BitUtil.getBit(flag, 5);
+                    if (back == 1){
+                        request.setBack(true);
+                    }
+                    Object requestBody = decodeSerializer.deserialize(body);
                     request.setBody(requestBody);
                 }
                 list.add(request);
@@ -139,7 +149,7 @@ public class WangCodec implements Codec {
                     response.setHeartbeat(true);
                 }
                 if (!response.isHeartbeat()){
-                    Object object = serializer.deserialize(body);
+                    Object object = decodeSerializer.deserialize(body);
                     response.setBody(object);
                 }
                 list.add(response);

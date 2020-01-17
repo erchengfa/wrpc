@@ -6,7 +6,6 @@ import com.github.wang.wrpc.context.remoting.disruptor.EventDisruptor;
 import com.github.wang.wrpc.context.remoting.disruptor.MessageEvent;
 import io.netty.channel.ChannelDuplexHandler;
 import io.netty.channel.ChannelHandlerContext;
-import io.netty.channel.ChannelPromise;
 import io.netty.handler.timeout.IdleStateEvent;
 import lombok.extern.slf4j.Slf4j;
 
@@ -40,7 +39,7 @@ public class NettyServerHandler extends ChannelDuplexHandler {
         if (msg instanceof Request){
             Request request = (Request) msg;
             if (request.isHeartbeat()){
-               // ctx.channel().writeAndFlush(handleHeartbeat(request));
+                ctx.channel().writeAndFlush(handleHeartbeat(request));
             }else {
                 eventDisruptor.publishEvent(new MessageEvent(ctx.channel(),request));
             }
