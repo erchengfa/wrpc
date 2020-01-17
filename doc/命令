@@ -1,0 +1,4 @@
+
+为顶级 Module 设置新版本：mvn versions:set -DnewVersion=0.1.2-SNATHOST
+
+更新所有子 Module 的版本：mvn versions:update-child-modules

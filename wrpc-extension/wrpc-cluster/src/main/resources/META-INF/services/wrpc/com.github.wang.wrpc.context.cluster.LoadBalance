@@ -1,0 +1,2 @@
+random=com.github.wang.wrpc.cluster.RandomLoadBalancer
+roundrobin=com.github.wang.wrpc.cluster.RoundRobinLoadBalancer

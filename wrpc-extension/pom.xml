@@ -9,7 +9,14 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>wrpc-common</artifactId>
+    <artifactId>wrpc-extension</artifactId>
+    <packaging>pom</packaging>
+    <modules>
+        <module>wrpc-kyro</module>
+        <module>wrpc-protocol-wang</module>
+        <module>wrpc-registry-zk</module>
+        <module>wrpc-cluster</module>
+    </modules>
 
 
 </project>

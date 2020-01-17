@@ -1,0 +1,1 @@
+kryo=com.github.wang.wrpc.serialization.kryo.kryoSerializer
