@@ -46,7 +46,7 @@ public abstract class AbstractKryoFactory implements KryoFactory {
             kryoCreated = true;
         }
 
-        Kryo kryo = new CompatibleKryo();
+        Kryo kryo = new Kryo();
 
         // TODO
         //kryo.setRegistrationRequired(true);

@@ -5,12 +5,15 @@ import com.github.wang.wrpc.common.exception.RPCRuntimeException;
 import com.github.wang.wrpc.common.utils.CommonUtils;
 import com.github.wang.wrpc.common.utils.StringUtils;
 import com.github.wang.wrpc.common.utils.UrlUtils;
-import com.github.wang.wrpc.context.registry.ProviderGroup;
-import com.github.wang.wrpc.context.registry.ProviderInfo;
 import com.github.wang.wrpc.context.common.RegistryUtils;
 import com.github.wang.wrpc.context.common.RpcConstants;
-import com.github.wang.wrpc.context.config.*;
+import com.github.wang.wrpc.context.config.ConsumerConfig;
+import com.github.wang.wrpc.context.config.ProviderConfig;
+import com.github.wang.wrpc.context.config.RegistryConfig;
+import com.github.wang.wrpc.context.config.RpcDefaultConfig;
 import com.github.wang.wrpc.context.observer.ProviderObserver;
+import com.github.wang.wrpc.context.registry.ProviderGroup;
+import com.github.wang.wrpc.context.registry.ProviderInfo;
 import com.github.wang.wrpc.context.registry.Registry;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.curator.RetryPolicy;
@@ -184,7 +187,6 @@ public class ZookeeperRegistry extends Registry {
     public void register(ProviderConfig config) {
 
         String providerPath = RegistryUtils.buildProviderPath(config.getInterfaceName());
-        // 避免重复计算
         List<String> urls = RegistryUtils.convertProviderToUrls(config);
         try {
             for (String url : urls) {
@@ -192,7 +194,7 @@ public class ZookeeperRegistry extends Registry {
                 log.debug("register providerUrl:{}", providerUrl);
                 getAndCheckZkClient().create().creatingParentContainersIfNeeded()
                         .withMode(CreateMode.EPHEMERAL) // 是否永久节点
-                        .forPath(providerUrl, new byte[]{1}); // 是否默认上下线
+                        .forPath(providerUrl, new byte[]{1}); //
             }
         } catch (Exception e) {
             throw new RPCRuntimeException("Failed register to zookeeper", e);

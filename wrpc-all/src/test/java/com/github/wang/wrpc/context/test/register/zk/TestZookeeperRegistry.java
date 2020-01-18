@@ -35,7 +35,7 @@ public class TestZookeeperRegistry {
 
         registry.start();
         ProviderConfig<IDemoService> providerConfig = new ProviderConfig<>();
-        providerConfig.setInterfaceName(IDemoService.class.getName());
+        providerConfig.setInterfaceClass(IDemoService.class);
         providerConfig.setServiceBean(new DemoServiceImpl());
         providerConfig.setRegistry(registryConfig);
         providerConfig.setServer(serverConfig);

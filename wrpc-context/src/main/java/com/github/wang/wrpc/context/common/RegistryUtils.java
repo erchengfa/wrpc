@@ -1,6 +1,7 @@
 package com.github.wang.wrpc.context.common;
 
 import com.github.wang.wrpc.common.utils.CommonUtils;
+import com.github.wang.wrpc.common.utils.JSONUtils;
 import com.github.wang.wrpc.common.utils.StringUtils;
 import com.github.wang.wrpc.context.config.ConsumerConfig;
 import com.github.wang.wrpc.context.config.ProviderConfig;
@@ -50,7 +51,8 @@ public class RegistryUtils {
                 //noinspection unchecked
                 sb.append(server.getProtocol()).append("://").append(host).append(":")
                         .append(port).append("?").append("applicationName=").append(//
-                                providerConfig.getApplicationName()).append(convertMap2Pair(metaData));
+                                providerConfig.getApplicationName())//
+                        .append(convertMap2Pair(metaData));
                 urls.add(sb.toString());
             }
             return urls;

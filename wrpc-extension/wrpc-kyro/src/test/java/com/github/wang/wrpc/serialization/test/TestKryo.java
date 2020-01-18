@@ -1,5 +1,6 @@
 package com.github.wang.wrpc.serialization.test;
 
+import com.github.wang.wrpc.common.exception.RPCRuntimeException;
 import com.github.wang.wrpc.context.serializer.Serializer;
 import com.github.wang.wrpc.serialization.kryo.kryoSerializer;
 import org.junit.Test;
@@ -14,10 +15,12 @@ public class TestKryo {
 
     @Test
     public void test() throws Throwable {
+        RPCRuntimeException rpcRuntimeException = new RPCRuntimeException(//
+                String.format("Can't find the corresponding method processing: %s", ""));
         User user = new User();
         user.setUserName("hello");
         user.setAge(18);
-        byte[] bytes = serializer.serialize("hello");
+        byte[] bytes = serializer.serialize(rpcRuntimeException);
 
         Object obj = serializer.deserialize(bytes);
         System.out.println(obj);

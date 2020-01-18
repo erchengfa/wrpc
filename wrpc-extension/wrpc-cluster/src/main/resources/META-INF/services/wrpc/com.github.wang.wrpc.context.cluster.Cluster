@@ -1,1 +1,2 @@
 failover=com.github.wang.wrpc.cluster.FailoverClusterInvoker
+failfast=com.github.wang.wrpc.cluster.FailfastClusterInvoker

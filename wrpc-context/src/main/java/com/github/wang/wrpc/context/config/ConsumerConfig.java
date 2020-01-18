@@ -1,7 +1,13 @@
 package com.github.wang.wrpc.context.config;
 
+import com.github.wang.wrpc.common.utils.ClassUtils;
+import com.github.wang.wrpc.context.annotation.WRpcMethod;
 import com.github.wang.wrpc.context.consumer.ConsumeApplicationContext;
 import lombok.Data;
+
+import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author : wang
@@ -50,14 +56,32 @@ public class ConsumerConfig<T> {
 
     private ConsumeApplicationContext consumeApplicationContext;
 
+    private List<Method> methods;
+
 
     public T refer(){
+        setMethods();
         consumeApplicationContext = new ConsumeApplicationContext(this);
         return  (T) consumeApplicationContext.refer();
     }
 
     public String getInterfaceName(){
         return interfaceClass.getName();
+    }
+
+
+    private void setMethods() {
+        List<Method> allMethods = ClassUtils.getAllMethods(interfaceClass);
+        this.methods = new ArrayList<>();
+        for (Method method:allMethods){
+            WRpcMethod wRpcMethod = method.getAnnotation(WRpcMethod.class);
+            if (wRpcMethod != null){
+                if (wRpcMethod.exclude()){
+                    continue;
+                }
+            }
+            this.methods.add(method);
+        }
     }
 
 

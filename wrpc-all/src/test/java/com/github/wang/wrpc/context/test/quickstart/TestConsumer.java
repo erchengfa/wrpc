@@ -22,8 +22,8 @@ public class TestConsumer {
         consumerConfig.setApplicationName("consumer");
         IDemoService iDemoService = consumerConfig.refer();
         while (true){
-            String wang = iDemoService.sayHello("wang");
-            System.out.println(wang);
+            System.out.println( iDemoService.sayHello1("wang"));
+            //System.out.println(wang);
             Thread.sleep(1000);
         }
 

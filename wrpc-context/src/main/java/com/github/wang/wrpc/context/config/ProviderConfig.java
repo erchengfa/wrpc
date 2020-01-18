@@ -1,10 +1,13 @@
 package com.github.wang.wrpc.context.config;
 
+import com.github.wang.wrpc.common.utils.ClassUtils;
 import com.github.wang.wrpc.common.utils.StringUtils;
+import com.github.wang.wrpc.context.annotation.WRpcMethod;
 import com.github.wang.wrpc.context.provider.ProviderApplicationContext;
-import lombok.Data;
+import lombok.Getter;
 import lombok.experimental.Accessors;
 
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,8 +15,8 @@ import java.util.List;
  * @author : wang
  * @date : 2020/1/5
  */
-@Data
 @Accessors
+@Getter
 public class ProviderConfig<T> {
 
     /**
@@ -21,7 +24,10 @@ public class ProviderConfig<T> {
      */
     protected int weight = RpcDefaultConfig.PROVIDER_WEIGHT;
 
-
+    /**
+     * 接口名
+     */
+    protected Class<?> interfaceClass ;
     /**
      * 服务接口名
      */
@@ -36,7 +42,7 @@ public class ProviderConfig<T> {
      */
     protected transient String serviceVersion;
 
-
+    private List<Method> methods;
     /**
      * 应用名
      */
@@ -62,9 +68,24 @@ public class ProviderConfig<T> {
      * 发布服务
      */
     public synchronized void export() {
+        setMethods();
         providerApplicationContext = new ProviderApplicationContext(this);
         providerApplicationContext.init();
         providerApplicationContext.start();
+    }
+
+    private void setMethods() {
+        List<Method> allMethods = ClassUtils.getAllMethods(interfaceClass);
+        this.methods = new ArrayList<>();
+        for (Method method:allMethods){
+            WRpcMethod wRpcMethod = method.getAnnotation(WRpcMethod.class);
+            if (wRpcMethod != null){
+                if (wRpcMethod.exclude()){
+                    continue;
+                }
+            }
+            this.methods.add(method);
+        }
     }
 
     public void setServer(ServerConfig serverConfig){
@@ -86,6 +107,16 @@ public class ProviderConfig<T> {
         return interfaceName + "-" + serviceVersion;
     }
 
+    public void setApplicationName(String applicationName) {
+        this.applicationName = applicationName;
+    }
 
+    public void setInterfaceClass(Class interfaceClass){
+        this.interfaceClass = interfaceClass;
+        this.interfaceName = interfaceClass.getName();
+    }
 
+    public void setServiceBean(T serviceBean) {
+        this.serviceBean = serviceBean;
+    }
 }

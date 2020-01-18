@@ -25,7 +25,7 @@ public class TestProvider {
         serverConfig.setPort(20801);
         ProviderConfig<IDemoService> providerConfig = new ProviderConfig<>();
         providerConfig.setApplicationName("demo1");
-        providerConfig.setInterfaceName(IDemoService.class.getName());
+        providerConfig.setInterfaceClass(IDemoService.class);
         providerConfig.setServiceBean(new DemoServiceImpl());
         providerConfig.setServer(serverConfig);
         providerConfig.setRegistry(registryConfig);
@@ -44,7 +44,7 @@ public class TestProvider {
         serverConfig.setPort(20802);
         ProviderConfig<IDemoService> providerConfig = new ProviderConfig<>();
         providerConfig.setApplicationName("demo2");
-        providerConfig.setInterfaceName(IDemoService.class.getName());
+        providerConfig.setInterfaceClass(IDemoService.class);
         providerConfig.setServiceBean(new DemoServiceImpl());
         providerConfig.setServer(serverConfig);
         providerConfig.setRegistry(registryConfig);

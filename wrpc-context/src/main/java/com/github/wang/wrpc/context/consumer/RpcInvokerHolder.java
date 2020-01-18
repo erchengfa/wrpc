@@ -2,6 +2,7 @@ package com.github.wang.wrpc.context.consumer;
 
 import com.github.wang.wrpc.common.exception.RPCRuntimeException;
 import com.github.wang.wrpc.common.utils.ThreadPoolUtils;
+import com.github.wang.wrpc.context.common.Invocation;
 import com.github.wang.wrpc.context.registry.ProviderInfo;
 import com.github.wang.wrpc.context.config.ConsumerConfig;
 import com.github.wang.wrpc.context.registry.ProviderGroup;
@@ -108,7 +109,7 @@ public class RpcInvokerHolder {
         }
     }
 
-    public List<RpcInvoker> listRpckInvoker() {
+    public List<RpcInvoker> listRpckInvoker(Invocation invocation) {
         if (CollectionUtils.isEmpty(urls)) {
             throw new RPCRuntimeException(String.format("%s no active provider", consumerConfig.getInterfaceName()));
         }

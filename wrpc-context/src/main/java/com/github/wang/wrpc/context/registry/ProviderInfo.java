@@ -4,6 +4,7 @@ import com.github.wang.wrpc.context.config.RpcDefaultConfig;
 import lombok.Data;
 
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * @author : wang
@@ -39,5 +40,7 @@ public class ProviderInfo implements Serializable {
      * 权重
      */
     private transient volatile int weight = RpcDefaultConfig.PROVIDER_WEIGHT;
+
+
 
 }

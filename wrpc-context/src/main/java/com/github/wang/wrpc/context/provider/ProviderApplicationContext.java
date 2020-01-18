@@ -32,7 +32,7 @@ public class ProviderApplicationContext{
 
     public void init() {
         //创建服务的处理器，并注册服务实例
-        providerServiceHandler = new ProviderServiceHandler();
+        providerServiceHandler = new ProviderServiceHandler(providerConfig);
         ServiceLoader<Registry> registryServiceLoader = ServiceLoaderFactory.getExtensionLoader(Registry.class);
         RegistryConfig registryConfig = providerConfig.getRegistry();
         this.registry = registryServiceLoader.getInstance(registryConfig.getProtocol(), new Class[]{RegistryConfig.class}, new RegistryConfig[]{registryConfig});

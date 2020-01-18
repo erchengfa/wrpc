@@ -2,6 +2,9 @@ package com.github.wang.wrpc.common.utils;
 
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
+
+import java.util.List;
 
 /**
  * 内置Json工具类
@@ -29,5 +32,13 @@ public final class JSONUtils {
     public static <T> T parseObject(String text, Class<T> clazz) {
         return JSON.parseObject(text, clazz);
     }
+
+
+    public static <T> List<T> parseList(String text, Class<T> clazz) {
+        return  JSONObject.parseArray(text, clazz);
+    }
+
+
+
 
 }

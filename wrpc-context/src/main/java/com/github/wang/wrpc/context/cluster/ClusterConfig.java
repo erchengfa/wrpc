@@ -1,5 +1,6 @@
 package com.github.wang.wrpc.context.cluster;
 
+import com.github.wang.wrpc.context.common.Invocation;
 import com.github.wang.wrpc.context.config.ConsumerConfig;
 import com.github.wang.wrpc.context.consumer.RpcInvoker;
 import com.github.wang.wrpc.context.consumer.RpcInvokerHolder;
@@ -26,8 +27,8 @@ public class ClusterConfig {
         return consumerConfig.getRetries();
     }
 
-    public List<RpcInvoker> listRpcInvoker() {
-        return rpcInvokerHolder.listRpckInvoker();
+    public List<RpcInvoker> listRpcInvoker(Invocation invocation) {
+        return rpcInvokerHolder.listRpckInvoker(invocation);
     }
 
     public LoadBalance getLoadBalance(){

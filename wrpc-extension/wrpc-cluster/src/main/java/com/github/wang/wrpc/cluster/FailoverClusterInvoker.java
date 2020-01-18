@@ -26,7 +26,7 @@ public class FailoverClusterInvoker extends Cluster {
     public WRPCResult doInvoke(Invocation invocation) {
         Integer retries = this.clusterConfig.getRetries();
         LoadBalance loadBalance = clusterConfig.getLoadBalance();
-        List<RpcInvoker> rpcInvokers = clusterConfig.listRpcInvoker();
+        List<RpcInvoker> rpcInvokers = clusterConfig.listRpcInvoker(invocation);
         for (int i=0; i < retries; i++){
             RpcInvoker rpcInvoker = loadBalance.select(invocation, rpcInvokers);
             try {

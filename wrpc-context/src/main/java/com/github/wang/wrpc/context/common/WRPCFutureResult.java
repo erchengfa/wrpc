@@ -13,17 +13,28 @@ public class WRPCFutureResult implements WRPCResult {
 
     private DefaultFuture defaultFuture;
 
+    private boolean back;
+
     public WRPCFutureResult(DefaultFuture defaultFuture){
+        this.back = true;
         this.defaultFuture = defaultFuture;
+    }
+    public WRPCFutureResult(){
+        this.back = false;
     }
 
 
     @Override
     public Object getResult() {
-        Response response = defaultFuture.getResponse();
-        if (response.getBody() instanceof RPCRuntimeException){
-           throw (RPCRuntimeException)response.getBody();
+        if (back){
+            Response response = defaultFuture.getResponse();
+            if (response.getBody() instanceof RPCRuntimeException){
+                throw (RPCRuntimeException)response.getBody();
+            }
+            return response.getBody();
+        }else {
+            return null;
         }
-        return response.getBody();
+
     }
 }

@@ -21,6 +21,11 @@ public class RpcConstants {
      */
     public static final String  CONFIG_KEY_SERIALIZATION           = "serialization";
 
+    /**
+     * 配置key:weight
+     */
+    public static final String  CONFIG_KEY_METHOD                  = "weight";
+
 
     /**
      * 默认的io线程数
@@ -28,7 +33,7 @@ public class RpcConstants {
     public static final int DEFAULT_IO_THREADS = Math.min(Runtime.getRuntime().availableProcessors() + 1, 32);
 
 
-    public static final long HEARTBEAT_TIMEOUT = 1000 * 5;
+    public static final long HEARTBEAT_TIMEOUT = 1000 * 60;
 
 
 

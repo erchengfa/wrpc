@@ -8,6 +8,10 @@ public class RPCRuntimeException extends RuntimeException {
     private int code;
     private String msg;
 
+    public RPCRuntimeException(){
+
+    }
+
     public RPCRuntimeException(Throwable cause) {
         super(cause);
     }
