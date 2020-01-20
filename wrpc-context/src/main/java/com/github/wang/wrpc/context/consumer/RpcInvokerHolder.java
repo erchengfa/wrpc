@@ -76,6 +76,8 @@ public class RpcInvokerHolder {
             RpcInvoker rpcInvoker = aliveRpcInvokerMap.get(providerInfo.getUrl());
             if (rpcInvoker == null) {
                 rpcInvoker = new RpcInvoker(providerInfo,this);
+            }else{
+                rpcInvoker.updateProviderInfo(providerInfo);
             }
             RpcInvoker finalRpcInvoker = rpcInvoker;
             rpcInkokerPoolExecutor.submit(new Runnable() {

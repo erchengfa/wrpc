@@ -33,6 +33,10 @@ public class RpcInvoker implements Invoker {
         this.rpcClient = new NettyClient(providerInfo);
     }
 
+    public void updateProviderInfo(ProviderInfo providerInfo){
+        this.providerInfo = providerInfo;
+    }
+
     public  void connect() {
         try {
             rpcClient.connect();
