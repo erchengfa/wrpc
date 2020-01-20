@@ -9,15 +9,15 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>wrpc-extension</artifactId>
-    <packaging>pom</packaging>
-    <modules>
-        <module>wrpc-kyro</module>
-        <module>wrpc-protocol-wang</module>
-        <module>wrpc-registry-zk</module>
-        <module>wrpc-cluster</module>
-        <module>wrpc-filter</module>
-    </modules>
+    <artifactId>wrpc-admin</artifactId>
 
+    <dependencies>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+
+    </dependencies>
 
 </project>

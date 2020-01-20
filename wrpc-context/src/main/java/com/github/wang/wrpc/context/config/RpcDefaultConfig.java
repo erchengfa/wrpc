@@ -1,5 +1,7 @@
 package com.github.wang.wrpc.context.config;
 
+import com.github.wang.wrpc.context.common.SerializationConstants;
+
 /**
  * @author : wang
  * @date : 2020/1/8
@@ -20,6 +22,11 @@ public class RpcDefaultConfig {
      * 默认序列化
      */
     public static final String SERIALIZATION = "kryo";
+
+    /**
+     * 默认序列化
+     */
+    public static final byte SERIALIZATION_ID = SerializationConstants.KRYO_SERIALIZATION_ID;
 
     /**
      * 默认注册中心

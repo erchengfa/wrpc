@@ -84,8 +84,7 @@ public class NettyClient implements RpcClient {
                 .channel(NioSocketChannel.class);
 
         ServiceLoader<Codec> serviceLoader = ServiceLoaderFactory.getExtensionLoader(Codec.class);
-        Codec codec = serviceLoader.getInstance(providerInfo.getProtocol(),
-                new Class[]{String.class},new String[]{providerInfo.getSerialization()});
+        Codec codec = serviceLoader.getInstance(providerInfo.getProtocol());
 
         NettyCodecAdapter nettyCodecAdapter = new NettyCodecAdapter(codec);
         //设置超时时间

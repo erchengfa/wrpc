@@ -33,6 +33,6 @@ public interface Serializer {
      * 获取序列化类型
      * @return
      */
-    byte getContentTypeId();
+    byte getId();
 
 }

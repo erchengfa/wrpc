@@ -18,7 +18,7 @@ public class TestCodec {
 
     @Test
     public void testWangCodec() throws Throwable {
-        WangCodec wangCodec = new WangCodec("kryo");
+        WangCodec wangCodec = new WangCodec();
         Request request = new Request();
         request.setHeartbeat(false);
         request.setBody("hello");

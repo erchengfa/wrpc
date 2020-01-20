@@ -60,7 +60,7 @@ public class kryoSerializer implements Serializer {
     }
 
     @Override
-    public byte getContentTypeId() {
+    public byte getId() {
         return SerializationConstants.KRYO_SERIALIZATION_ID;
     }
 

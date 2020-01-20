@@ -45,7 +45,7 @@ public class ProviderServiceHandler implements MessageHandler {
 
 
     private Response handleRequest(Request request) {
-        Response response = new Response(request.getId());
+        Response response = new Response(request.getId(),request.getSerializerId());
         Invocation requestBody = (Invocation) request.getBody();
         String serviceName = requestBody.getServiceName();
         String serviceVersion = requestBody.getServiceVersion();

@@ -195,9 +195,9 @@ public class ServiceLoader<T> {
         if (spiClassInfoMap == null){
             throw new RPCRuntimeException("Not found extension of " + interfaceName);
         }
-        for (String alia: singleInstanceMap.keySet()){
-            T t = singleInstanceMap.get(alia);
-            list.add(t);
+        for (String alia: spiClassInfoMap.keySet()){
+            T instance = getInstance(alia);
+            list.add(instance);
         }
         return list;
     }

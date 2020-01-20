@@ -1,5 +1,6 @@
 package com.github.wang.wrpc.context.common;
 
+import com.github.wang.wrpc.context.config.RpcDefaultConfig;
 import lombok.Data;
 
 import java.util.concurrent.atomic.AtomicLong;
@@ -19,11 +20,19 @@ public class Request {
 
     private boolean heartbeat;//是否心跳消息
 
+    private byte serializerId = RpcDefaultConfig.SERIALIZATION_ID;
+
     private Object body;
 
     public Request() {
         this.isBack = true;
         this.id = newId();
+    }
+
+    public Request(byte serializerId) {
+        this.isBack = true;
+        this.id = newId();
+        this.serializerId = serializerId;
     }
 
     public Request(long id) {

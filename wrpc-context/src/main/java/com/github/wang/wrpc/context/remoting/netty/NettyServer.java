@@ -58,8 +58,7 @@ public class NettyServer implements Server {
                 new DefaultThreadFactory("NettyServerWorker", true));
 
         ServiceLoader<Codec> codecLoader = ServiceLoaderFactory.getExtensionLoader(Codec.class);
-        Codec codec = codecLoader.getInstance(serverConfig.getProtocol(),
-                new Class[]{String.class},new String[]{serverConfig.getSerialization()});
+        Codec codec = codecLoader.getInstance(serverConfig.getProtocol());
 
         NettyCodecAdapter nettyCodecAdapter = new NettyCodecAdapter(codec);
         bootstrap.group(bossGroup, workerGroup)
