@@ -24,7 +24,7 @@ public class TestProvider {
         ServerConfig serverConfig = new ServerConfig();
         serverConfig.setPort(20801);
         ProviderConfig<IDemoService> providerConfig = new ProviderConfig<>();
-        providerConfig.setApplicationName("demo1");
+        providerConfig.setAppName("demo1");
         providerConfig.setInterfaceClass(IDemoService.class);
         providerConfig.setServiceBean(new DemoServiceImpl());
         providerConfig.setServer(serverConfig);
@@ -43,7 +43,27 @@ public class TestProvider {
         ServerConfig serverConfig = new ServerConfig();
         serverConfig.setPort(20802);
         ProviderConfig<IDemoService> providerConfig = new ProviderConfig<>();
-        providerConfig.setApplicationName("demo2");
+        providerConfig.setAppName("demo2");
+        providerConfig.setInterfaceClass(IDemoService.class);
+        providerConfig.setServiceBean(new DemoServiceImpl());
+        providerConfig.setServer(serverConfig);
+        providerConfig.setRegistry(registryConfig);
+        providerConfig.export();
+        System.in.read();
+
+    }
+
+
+    @Test
+    public void test3() throws IOException {
+        RegistryConfig registryConfig = new RegistryConfig();
+        registryConfig.setProtocol("zookeeper");
+        registryConfig.setAddress("118.89.196.99:2181");
+
+        ServerConfig serverConfig = new ServerConfig();
+        serverConfig.setPort(20803);
+        ProviderConfig<IDemoService> providerConfig = new ProviderConfig<>();
+        providerConfig.setAppName("demo2");
         providerConfig.setInterfaceClass(IDemoService.class);
         providerConfig.setServiceBean(new DemoServiceImpl());
         providerConfig.setServer(serverConfig);

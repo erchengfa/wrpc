@@ -3,6 +3,7 @@ package com.github.wang.registry.zk;
 
 import com.github.wang.wrpc.common.exception.RPCRuntimeException;
 import com.github.wang.wrpc.common.utils.CommonUtils;
+import com.github.wang.wrpc.common.utils.JSONUtils;
 import com.github.wang.wrpc.common.utils.StringUtils;
 import com.github.wang.wrpc.common.utils.UrlUtils;
 import com.github.wang.wrpc.context.common.RegistryUtils;
@@ -185,16 +186,15 @@ public class ZookeeperRegistry extends Registry {
 
     @Override
     public void register(ProviderConfig config) {
-
-        String providerPath = RegistryUtils.buildProviderPath(config.getInterfaceName());
-        List<String> urls = RegistryUtils.convertProviderToUrls(config);
+        String providerPath = RegistryUtils.buildProviderPath(config.getServiceName());
+        List<ProviderInfo> providerInfos = RegistryUtils.convertProviderInfos(config);
         try {
-            for (String url : urls) {
-                String providerUrl = providerPath + CONTEXT_SEP + UrlUtils.getURLEncoderString(url);
+            for (ProviderInfo providerInfo : providerInfos) {
+                String providerUrl = providerPath + CONTEXT_SEP + UrlUtils.getURLEncoderString(providerInfo.getUrl());
                 log.debug("register providerUrl:{}", providerUrl);
                 getAndCheckZkClient().create().creatingParentContainersIfNeeded()
-                        .withMode(CreateMode.EPHEMERAL) // 是否永久节点
-                        .forPath(providerUrl, new byte[]{1}); //
+                        .withMode(CreateMode.EPHEMERAL) // 临时节点
+                        .forPath(providerUrl, providerInfo.convertData()); //节点 + 动态变更的数据
             }
         } catch (Exception e) {
             throw new RPCRuntimeException("Failed register to zookeeper", e);
@@ -208,31 +208,26 @@ public class ZookeeperRegistry extends Registry {
         subscribeConsumerUrls(config);
         // 订阅Providers节点
         try {
-            final String providerPath = RegistryUtils.buildProviderPath(config.getInterfaceName());
+            final String providerPath = RegistryUtils.buildProviderPath(config.getServiceName());
             PathChildrenCache pathChildrenCache = INTERFACE_PROVIDER_CACHE.get(config);
             if (pathChildrenCache == null) {
-                // 监听配置节点下 子节点增加、子节点删除、子节点Data修改事件
-                // TODO 换成监听父节点变化（只是监听变化了，而不通知变化了什么，然后客户端自己来拉数据的）
                 pathChildrenCache = new PathChildrenCache(zkClient, providerPath, true);
                 final PathChildrenCache finalPathChildrenCache = pathChildrenCache;
                 pathChildrenCache.getListenable().addListener(new PathChildrenCacheListener() {
                     @Override
                     public void childEvent(CuratorFramework client, PathChildrenCacheEvent event) throws Exception {
                         if (log.isDebugEnabled()) {
-                            log.debug("Receive zookeeper event: {},{}", config.getApplicationName());
+                            log.debug("Receive zookeeper event: {},{}", config.getAppName(),finalPathChildrenCache.getCurrentData());
                         }
                         switch (event.getType()) {
                             case CHILD_ADDED: //加了一个provider
-                                ProviderGroup addProviderGroup = toProviderGoup(config, providerPath, finalPathChildrenCache.getCurrentData());
-                                notifyObserver(addProviderGroup);
+                                notifyObserver(toProviderGoup(config, providerPath, finalPathChildrenCache.getCurrentData()));
                                 break;
                             case CHILD_REMOVED: //删了一个provider
-                                ProviderGroup removeProviderGroup = toProviderGoup(config, providerPath, finalPathChildrenCache.getCurrentData());
-                                notifyObserver(removeProviderGroup);
+                                notifyObserver(toProviderGoup(config, providerPath, finalPathChildrenCache.getCurrentData()));
                                 break;
                             case CHILD_UPDATED: // 更新一个Provider
-                                ProviderGroup updateProviderGroup = toProviderGoup(config, providerPath, finalPathChildrenCache.getCurrentData());
-                                notifyObserver(updateProviderGroup);
+                                notifyObserver(toProviderGoup(config, providerPath, finalPathChildrenCache.getCurrentData()));
                                 break;
                             default:
                                 break;
@@ -274,25 +269,22 @@ public class ZookeeperRegistry extends Registry {
     public List<ProviderInfo> toProviderInfos(ConsumerConfig config,String providerPath, List<ChildData> childDataList) {
         List<ProviderInfo> providerInfos = new ArrayList<>();
         for (ChildData childData : childDataList) {
-            ProviderInfo providerInfo = new ProviderInfo();
+            String data = new String(childData.getData());
+            ProviderInfo providerInfo = JSONUtils.parseObject(data, ProviderInfo.class);
             String url = childData.getPath().substring(providerPath.length() + 1);
             url = UrlUtils.getURLDecoderString(url);
-            providerInfo.setOriginUrl(url);
+            providerInfo.setUrl(url);
             int protocolIndex = url.indexOf("://");
             String protocol = url.substring(0, protocolIndex);
             providerInfo.setProtocol(protocol);
-            String remainUrl = url.substring(protocolIndex + 3);
-            int addressIndex = remainUrl.indexOf('?');
-            String address = remainUrl.substring(0, addressIndex);
+            String remainPath = url.substring(protocolIndex + 3);
+            int addressIndex = remainPath.indexOf('?');
+            String address = remainPath.substring(0, addressIndex);
             String[] ipAndPort = address.split(":", -1);
             providerInfo.setHost(ipAndPort[0]);
             providerInfo.setPort(CommonUtils.parseInt(ipAndPort[1],RpcDefaultConfig.PORT));
-
             Map<String, String> urlParams = UrlUtils.getUrlParams(url);
-            providerInfo.setWeight(CommonUtils.parseInt(//
-                    urlParams.get(RpcConstants.CONFIG_KEY_WEIGHT),//
-                    RpcDefaultConfig.PROVIDER_WEIGHT));
-            providerInfo.setSerialization(config.getSerialization());
+            providerInfo.setAppName(urlParams.get(RpcConstants.CONFIG_KEY_APP_NAME));
             providerInfos.add(providerInfo);
         }
         return providerInfos;
@@ -306,7 +298,7 @@ public class ZookeeperRegistry extends Registry {
         // 注册Consumer节点
         String url = null;
         try {
-            String consumerPath = RegistryUtils.buildConsumerPath(config.getInterfaceName());
+            String consumerPath = RegistryUtils.buildConsumerPath(config.getInterfaceName(),config.getServiceVersion());
             if (consumerUrls.containsKey(config)) {
                 url = consumerUrls.get(config);
             } else {
@@ -317,7 +309,6 @@ public class ZookeeperRegistry extends Registry {
             getAndCheckZkClient().create().creatingParentContainersIfNeeded()
                     .withMode(CreateMode.EPHEMERAL) // Consumer临时节点
                     .forPath(consumerPath + CONTEXT_SEP + encodeUrl);
-
         } catch (KeeperException.NodeExistsException nodeExistsException) {
             if (log.isWarnEnabled()) {
                 log.warn("consumer has exists in zookeeper, consumer=" + url);

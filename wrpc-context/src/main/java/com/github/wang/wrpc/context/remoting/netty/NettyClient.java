@@ -154,7 +154,7 @@ public class NettyClient implements RpcClient {
         }
     }
 
-    public boolean isRemove(){
+    public boolean isDead(){
         if (isActive()){
             return false;
         }

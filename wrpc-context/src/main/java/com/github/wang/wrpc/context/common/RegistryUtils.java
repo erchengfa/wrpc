@@ -1,14 +1,13 @@
 package com.github.wang.wrpc.context.common;
 
 import com.github.wang.wrpc.common.utils.CommonUtils;
-import com.github.wang.wrpc.common.utils.JSONUtils;
 import com.github.wang.wrpc.common.utils.StringUtils;
 import com.github.wang.wrpc.context.config.ConsumerConfig;
 import com.github.wang.wrpc.context.config.ProviderConfig;
 import com.github.wang.wrpc.context.config.ServerConfig;
+import com.github.wang.wrpc.context.registry.ProviderInfo;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -20,44 +19,33 @@ public class RegistryUtils {
 
     public static String buildProviderPath(String serviceName) {
         return "/wrpc/" + serviceName + "/providers";
+
     }
-
-    public static String buildConsumerPath( String serviceName) {
-        return  "/wrpc/" + serviceName + "/consumers";
+    public static String buildConsumerPath( String serviceName,String version) {
+        return "/wrpc/" + serviceName + "/consumers";
     }
-
-    public static String buildConfigPath(String rootPath, String serviceName) {
-        return  "/wrpc/" + serviceName + "/configs";
-    }
-
-
-
-    /**
-     * Convert provider to url.
-     *
-     * @param providerConfig the ProviderConfig
-     * @return the url list
-     */
-    public static List<String> convertProviderToUrls(ProviderConfig providerConfig) {
-        @SuppressWarnings("unchecked")
+    public static List<ProviderInfo> convertProviderInfos(ProviderConfig providerConfig) {
         List<ServerConfig> servers = providerConfig.getServers();
+        List<ProviderInfo> providerInfos = new ArrayList<>(servers.size());
         if (servers != null && !servers.isEmpty()) {
-            List<String> urls = new ArrayList<String>();
             for (ServerConfig server : servers) {
+                ProviderInfo providerInfo = new ProviderInfo();
+                providerInfo.setHost(server.getHost());
+                providerInfo.setPort(server.getPort());
+                providerInfo.setWeight(server.getWeight());
+                providerInfo.setProtocol(server.getProtocol());
+                providerInfo.setAppName(providerConfig.getAppName());
                 StringBuilder sb = new StringBuilder(200);
-                String host = server.getHost();
-                Integer port = server.getPort();
-                Map<String, String> metaData = convertProviderToMap(providerConfig, server);
-                //noinspection unchecked
-                sb.append(server.getProtocol()).append("://").append(host).append(":")
-                        .append(port).append("?").append("applicationName=").append(//
-                                providerConfig.getApplicationName())//
-                        .append(convertMap2Pair(metaData));
-                urls.add(sb.toString());
+                sb.append(providerInfo.getProtocol()).append("://")//
+                        .append(providerInfo.getHost()).append(":")
+                        .append(providerInfo.getPort()).append("?")//
+                        .append(RpcConstants.CONFIG_KEY_APP_NAME).append("=")//
+                        .append(providerInfo.getAppName());
+                providerInfo.setUrl(sb.toString());
+                providerInfos.add(providerInfo);
             }
-            return urls;
         }
-        return null;
+        return providerInfos;
     }
     /**
      * 转换 map to url pair
@@ -93,19 +81,11 @@ public class RegistryUtils {
         }
     }
 
-
-    public static Map<String, String> convertProviderToMap(ProviderConfig providerConfig, ServerConfig server) {
-        Map<String, String> metaData = new HashMap<String, String>();
-        metaData.put(RpcConstants.CONFIG_KEY_WEIGHT, String.valueOf(providerConfig.getWeight()));
-
-        return metaData;
-    }
-
     public static String convertConsumerToUrl(ConsumerConfig consumerConfig) {
         StringBuilder sb = new StringBuilder(200);
         String host = SystemInfo.getLocalHost();
         sb.append(consumerConfig.getProtocol()).append("://").append(host).append("?")//
-                .append(RegistryUtils.getKeyPairs(RpcConstants.CONFIG_KEY_APP_NAME, consumerConfig.getApplicationName()))
+                .append(RegistryUtils.getKeyPairs(RpcConstants.CONFIG_KEY_APP_NAME, consumerConfig.getAppName()))
                 .append(getKeyPairs(RpcConstants.CONFIG_KEY_SERIALIZATION,
                         consumerConfig.getSerialization()));
         return sb.toString();

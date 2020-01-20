@@ -1,6 +1,7 @@
 package com.github.wang.wrpc.context.config;
 
 import com.github.wang.wrpc.common.utils.ClassUtils;
+import com.github.wang.wrpc.common.utils.StringUtils;
 import com.github.wang.wrpc.context.annotation.WRpcMethod;
 import com.github.wang.wrpc.context.consumer.ConsumeApplicationContext;
 import lombok.Data;
@@ -29,7 +30,7 @@ public class ConsumerConfig<T> {
     /**
      * The App name.
      */
-    protected String applicationName;
+    protected String appName;
 
     /**
      * The Retries. 失败后重试次数
@@ -84,6 +85,11 @@ public class ConsumerConfig<T> {
         }
     }
 
-
+    public String getServiceName(){
+        if (StringUtils.isBlank(this.serviceVersion)){
+            return interfaceClass.getName();
+        }
+        return interfaceClass.getName() + "-" + serviceVersion;
+    }
 
 }

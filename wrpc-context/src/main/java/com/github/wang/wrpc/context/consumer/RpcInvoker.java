@@ -25,17 +25,15 @@ public class RpcInvoker implements Invoker {
     private RpcClient rpcClient;
     private ProviderInfo providerInfo;
 
-    private ConsumerConfig consumerConfig;
+    private RpcInvokerHolder rpcInvokerHolder;
 
-    public RpcInvoker(ProviderInfo providerInfo, ConsumerConfig consumerConfig) {
+    public RpcInvoker(ProviderInfo providerInfo,RpcInvokerHolder rpcInvokerHolder) {
         this.providerInfo = providerInfo;
-        this.consumerConfig = consumerConfig;
+        this.rpcInvokerHolder = rpcInvokerHolder;
         this.rpcClient = new NettyClient(providerInfo);
-
-
     }
 
-    public void connect() {
+    public  void connect() {
         try {
             rpcClient.connect();
         } catch (Throwable e) {
@@ -49,13 +47,13 @@ public class RpcInvoker implements Invoker {
             @Override
             public WRPCResult invoke(Invocation invocation) {
                 log.debug("send request providerInfo invocation:{},{}", providerInfo, invocation);
-                byte serializerId = SerializerUtils.getSerializerId(consumerConfig.getSerialization());
+                byte serializerId = SerializerUtils.getSerializerId(getConsumerConfig().getSerialization());
                 Request request = new Request(serializerId);
                 request.setHeartbeat(false);
                 request.setBody(invocation);
                 assembleRequest(request, invocation);
                 if (request.isBack()) {
-                    DefaultFuture defaultFuture = DefaultFuture.newFuture(request, consumerConfig.getInvokeTimeout());
+                    DefaultFuture defaultFuture = DefaultFuture.newFuture(request, getConsumerConfig().getInvokeTimeout());
                     rpcClient.send(request);
                     return new WRPCFutureResult(defaultFuture);
                 } else {
@@ -71,7 +69,7 @@ public class RpcInvoker implements Invoker {
     public void assembleRequest(Request request, Invocation invocation) {
         String invocationMethodName = ClassUtils.getMethodName(invocation.getMethodName(), invocation.getParameterTypes());
         Method invokeMethod = null;
-        for (Method method : (List<Method>) consumerConfig.getMethods()) {
+        for (Method method : (List<Method>) getConsumerConfig().getMethods()) {
             String methodName = ClassUtils.getMethodName(method.getName(), method.getParameterTypes());
             if (methodName.equals(invocationMethodName)) {
                 invokeMethod = method;
@@ -99,7 +97,11 @@ public class RpcInvoker implements Invoker {
         return rpcClient.isActive();
     }
 
-    public boolean isRemove() {
-        return rpcClient.isRemove();
+    public boolean isDead() {
+        return rpcClient.isDead();
+    }
+
+    private ConsumerConfig getConsumerConfig(){
+        return rpcInvokerHolder.getConsumerConfig();
     }
 }

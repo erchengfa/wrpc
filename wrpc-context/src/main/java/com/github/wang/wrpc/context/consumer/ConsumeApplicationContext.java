@@ -36,9 +36,14 @@ public class ConsumeApplicationContext{
 
     public ConsumeApplicationContext(ConsumerConfig consumerConfig){
         this.consumerConfig = consumerConfig;
+    }
+
+
+    public Object refer(){
+        //1、构建invoker
         ServiceLoader<Registry> registryServiceLoader = ServiceLoaderFactory.getExtensionLoader(Registry.class);
         RegistryConfig registryConfig = consumerConfig.getRegistry();
-        rpcInvokerHolder = new RpcInvokerHolder(consumerConfig);
+        rpcInvokerHolder = new RpcInvokerHolder(this);
         this.registry = registryServiceLoader.getInstance(registryConfig.getProtocol(), //
                 new Class[]{RegistryConfig.class}, new RegistryConfig[]{registryConfig});
         providerObserver = new ConsumerApplicationProviderObserver(rpcInvokerHolder);
@@ -46,11 +51,6 @@ public class ConsumeApplicationContext{
         this.registry.start();
         ProviderGroup providerGroup = this.registry.subscribe(consumerConfig);
         rpcInvokerHolder.refresh(providerGroup);
-    }
-
-
-    public Object refer(){
-        //1、构建invoker
 
         ServiceLoader<LoadBalance> loadBalanceServiceLoader = ServiceLoaderFactory.getExtensionLoader(LoadBalance.class);
         this.loadBalance = loadBalanceServiceLoader.getInstance(consumerConfig.getLoadBlance());
@@ -66,4 +66,7 @@ public class ConsumeApplicationContext{
         return invocationProxy.create(consumerConfig.getInterfaceClass(),consumerConfig.getServiceVersion());
     }
 
+    public ConsumerConfig getConsumerConfig() {
+        return consumerConfig;
+    }
 }

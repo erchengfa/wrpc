@@ -1,5 +1,6 @@
 package com.github.wang.wrpc.context.config;
 
+import com.github.wang.wrpc.common.exception.RPCRuntimeException;
 import com.github.wang.wrpc.common.utils.ClassUtils;
 import com.github.wang.wrpc.common.utils.StringUtils;
 import com.github.wang.wrpc.context.annotation.WRpcMethod;
@@ -18,11 +19,6 @@ import java.util.List;
 @Accessors
 @Getter
 public class ProviderConfig<T> {
-
-    /**
-     * 权重
-     */
-    protected int weight = RpcDefaultConfig.PROVIDER_WEIGHT;
 
     /**
      * 接口名
@@ -46,7 +42,7 @@ public class ProviderConfig<T> {
     /**
      * 应用名
      */
-    protected String applicationName;
+    protected String appName;
 
     /**
      * 配置的服务列表
@@ -68,6 +64,9 @@ public class ProviderConfig<T> {
      * 发布服务
      */
     public synchronized void export() {
+        if (StringUtils.isEmpty(this.appName)){
+            throw new RPCRuntimeException(String.format("applicationName is not null:%s",this.appName));
+        }
         setMethods();
         providerApplicationContext = new ProviderApplicationContext(this);
         providerApplicationContext.init();
@@ -107,9 +106,6 @@ public class ProviderConfig<T> {
         return interfaceName + "-" + serviceVersion;
     }
 
-    public void setApplicationName(String applicationName) {
-        this.applicationName = applicationName;
-    }
 
     public void setInterfaceClass(Class interfaceClass){
         this.interfaceClass = interfaceClass;
@@ -118,5 +114,13 @@ public class ProviderConfig<T> {
 
     public void setServiceBean(T serviceBean) {
         this.serviceBean = serviceBean;
+    }
+
+    public void setServiceVersion(String serviceVersion){
+        this.serviceVersion = serviceVersion;
+    }
+
+    public void setAppName(String appName){
+        this.appName = appName;
     }
 }

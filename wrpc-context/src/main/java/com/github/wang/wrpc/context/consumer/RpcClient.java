@@ -12,5 +12,5 @@ public interface RpcClient {
 
     boolean isActive();
 
-    boolean isRemove();
+    boolean isDead();
 }

@@ -18,6 +18,11 @@ public class ServerConfig {
     private String protocol = RpcDefaultConfig.PROTOCOL;
 
     /**
+     * 权重
+     */
+    protected int weight = RpcDefaultConfig.PROVIDER_WEIGHT;
+
+    /**
      * 实际监听IP，与网卡对应
      */
     private String host = NetUtils.getLocalIpv4();

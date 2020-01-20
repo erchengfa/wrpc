@@ -19,14 +19,18 @@ public class TestConsumer {
         ConsumerConfig<IDemoService> consumerConfig = new ConsumerConfig<>();
         consumerConfig.setInterfaceClass(IDemoService.class);
         consumerConfig.setRegistry(registryConfig);
-        consumerConfig.setApplicationName("consumer");
+        consumerConfig.setAppName("consumer");
         IDemoService iDemoService = consumerConfig.refer();
         while (true){
-            System.out.println( iDemoService.sayHello("wang"));
-            //System.out.println(wang);
-            //Thread.sleep(1000);
-        }
+            try {
+                System.out.println(iDemoService.sayHello("wang"));
+                Thread.sleep(1000);
+            }catch (Exception e){
 
+            }
+
+        }
+//        System.in.read();
     }
 
 }

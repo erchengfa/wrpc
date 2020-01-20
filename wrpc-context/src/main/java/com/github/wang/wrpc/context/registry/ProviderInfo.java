@@ -1,10 +1,10 @@
 package com.github.wang.wrpc.context.registry;
 
+import com.github.wang.wrpc.common.utils.JSONUtils;
 import com.github.wang.wrpc.context.config.RpcDefaultConfig;
 import lombok.Data;
 
 import java.io.Serializable;
-import java.util.List;
 
 /**
  * @author : wang
@@ -15,10 +15,9 @@ public class ProviderInfo implements Serializable {
 
     private static final long serialVersionUID = -6438690329875954051L;
 
-    /**
-     * 原始地址
-     */
-    private transient String originUrl;
+    private String appName;
+
+    private String url;
 
     /**
      * 协议
@@ -32,15 +31,18 @@ public class ProviderInfo implements Serializable {
     /**
      * The Port.
      */
-    private int port;
-
-    private String serialization;
+    private Integer port;
 
     /**
      * 权重
      */
-    private transient volatile int weight = RpcDefaultConfig.PROVIDER_WEIGHT;
+    private  volatile int weight = RpcDefaultConfig.PROVIDER_WEIGHT;
 
+    public byte[] convertData(){
+        ProviderInfo providerInfo = new ProviderInfo();
+        providerInfo.setWeight(this.weight);
+        return JSONUtils.toJSONString(providerInfo).getBytes();
+    }
 
 
 }
