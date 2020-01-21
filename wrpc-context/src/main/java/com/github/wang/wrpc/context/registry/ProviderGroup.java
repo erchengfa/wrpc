@@ -1,6 +1,5 @@
 package com.github.wang.wrpc.context.registry;
 
-import com.github.wang.wrpc.context.registry.ProviderInfo;
 import lombok.Data;
 
 import java.util.List;
@@ -17,7 +16,7 @@ public class ProviderGroup {
     /**
      * 服务名称
      */
-    protected String interfaceName;
+    protected String serviceName;
 
     /**
      * 服务分组下服务端列表（缓存的是List，方便快速读取）

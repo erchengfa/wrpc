@@ -22,7 +22,6 @@ public class ProviderApplicationContext{
 
     private ProviderConfig providerConfig;
 
-    private ProviderServiceHandler providerServiceHandler;
 
     private Registry registry;
 
@@ -32,7 +31,6 @@ public class ProviderApplicationContext{
 
     public void init() {
         //创建服务的处理器，并注册服务实例
-        providerServiceHandler = new ProviderServiceHandler(providerConfig);
         ServiceLoader<Registry> registryServiceLoader = ServiceLoaderFactory.getExtensionLoader(Registry.class);
         RegistryConfig registryConfig = providerConfig.getRegistry();
         this.registry = registryServiceLoader.getInstance(registryConfig.getProtocol(), new Class[]{RegistryConfig.class}, new RegistryConfig[]{registryConfig});
@@ -40,15 +38,13 @@ public class ProviderApplicationContext{
 
     public void start(){
         Object serviceBean = providerConfig.getServiceBean();
-        providerServiceHandler.registerServiceBean(providerConfig.getServiceName(),serviceBean);
         List<ServerConfig> serverConfigs = providerConfig.getServers();
         if (CollectionUtils.isEmpty(serverConfigs)){
             throw new RPCRuntimeException("server is empty");
         }
         for (ServerConfig serverConfig:serverConfigs){
             Server server = serverConfig.getServer();
-            server.registerServiceHanler(providerServiceHandler);
-            server.open();
+            server.registerServiceBean(providerConfig.getServiceName(),serviceBean);
         }
         //注册服务
         registry.start();

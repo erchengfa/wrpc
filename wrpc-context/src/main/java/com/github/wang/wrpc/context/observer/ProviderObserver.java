@@ -15,4 +15,6 @@ public interface ProviderObserver {
      */
     void update(ProviderGroup providerGroup);
 
+    String getServiceName();
+
 }

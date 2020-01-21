@@ -94,6 +94,13 @@ public class ProviderConfig<T> {
         servers.add(serverConfig);
     }
 
+    public void setServers(List<ServerConfig> servers){
+        if (servers == null){
+            servers = new ArrayList<>();
+        }
+        servers.addAll(servers);
+    }
+
 
     public void setRegistry(RegistryConfig registryConfig){
         registry = registryConfig;

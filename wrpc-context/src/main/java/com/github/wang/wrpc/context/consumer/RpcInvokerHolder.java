@@ -110,7 +110,7 @@ public class RpcInvokerHolder {
 
     public List<RpcInvoker> listRpckInvoker(Invocation invocation) {
         if (CollectionUtils.isEmpty(urls)) {
-            throw new RPCRuntimeException(String.format("%s no active provider", context.getConsumerConfig().getInterfaceName()));
+            throw new RPCRuntimeException(String.format("%s no active provider", context.getConsumerConfig().getServiceName()));
         }
         List<RpcInvoker> rpcInvokers = new ArrayList<>();
         for (String url : urls) {
@@ -120,7 +120,7 @@ public class RpcInvokerHolder {
             }
         }
         if (CollectionUtils.isEmpty(rpcInvokers)) {
-            throw new RPCRuntimeException(String.format("%s no active provider", context.getConsumerConfig().getInterfaceName()));
+            throw new RPCRuntimeException(String.format("%s no active provider", context.getConsumerConfig().getServiceName()));
         }
         return rpcInvokers;
     }

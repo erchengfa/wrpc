@@ -11,14 +11,19 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class ConsumerApplicationProviderObserver implements ProviderObserver {
 
-    private RpcInvokerHolder rpcClientPool;
+    private RpcInvokerHolder rpcInvokerHolder;
 
-    public ConsumerApplicationProviderObserver(RpcInvokerHolder rpcClientPool){
-        this.rpcClientPool = rpcClientPool;
+    public ConsumerApplicationProviderObserver(RpcInvokerHolder rpcInvokerHolder){
+        this.rpcInvokerHolder = rpcInvokerHolder;
     }
 
     @Override
     public void update(ProviderGroup providerGroup) {
-        rpcClientPool.refresh(providerGroup);
+        rpcInvokerHolder.refresh(providerGroup);
+    }
+
+    @Override
+    public String getServiceName() {
+        return rpcInvokerHolder.getConsumerConfig().getServiceName();
     }
 }

@@ -33,11 +33,6 @@ public class ServerConfig {
     private int port = RpcDefaultConfig.PORT;
 
     /**
-     * 序列化
-     */
-    private String serialization = RpcDefaultConfig.SERIALIZATION;
-
-    /**
      * 消息处理的线程数
      */
     private int messageHandleThreadSize  = RpcDefaultConfig.MESSAGE_HANDLE_THREAD_SIZE;

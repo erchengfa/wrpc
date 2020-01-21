@@ -1,6 +1,8 @@
 package com.github.wang.wrpc.context.config;
 
+import com.alibaba.fastjson.annotation.JSONField;
 import com.github.wang.wrpc.common.utils.ClassUtils;
+import com.github.wang.wrpc.common.utils.JSONUtils;
 import com.github.wang.wrpc.common.utils.StringUtils;
 import com.github.wang.wrpc.context.annotation.WRpcMethod;
 import com.github.wang.wrpc.context.consumer.ConsumeApplicationContext;
@@ -66,10 +68,6 @@ public class ConsumerConfig<T> {
         return  (T) consumeApplicationContext.refer();
     }
 
-    public String getInterfaceName(){
-        return interfaceClass.getName();
-    }
-
 
     private void setMethods() {
         List<Method> allMethods = ClassUtils.getAllMethods(interfaceClass);
@@ -85,11 +83,23 @@ public class ConsumerConfig<T> {
         }
     }
 
+    @JSONField(serialize = false)
     public String getServiceName(){
         if (StringUtils.isBlank(this.serviceVersion)){
             return interfaceClass.getName();
         }
         return interfaceClass.getName() + "-" + serviceVersion;
+    }
+
+    public byte[] convertData(){
+        ConsumerConfig config = new ConsumerConfig<>();
+        config.setSerialization(this.getSerialization());
+        config.setCluster(this.getCluster());
+        config.setRetries(this.getRetries());
+        config.setLoadBlance(this.getLoadBlance());
+        config.setInvokeTimeout(this.getInvokeTimeout());
+
+        return JSONUtils.toJSONString(config).getBytes();
     }
 
 }

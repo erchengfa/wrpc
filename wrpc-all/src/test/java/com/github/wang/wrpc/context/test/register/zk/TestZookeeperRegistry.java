@@ -80,6 +80,11 @@ public class TestZookeeperRegistry {
         registryConfig.setProtocol("zookeeper");
         registryConfig.setAddress("118.89.196.99:2181");
 
+        ConsumerConfig<IDemoService> consumerConfig = new ConsumerConfig<>();
+        consumerConfig.setAppName("hello-consumer");
+        consumerConfig.setInterfaceClass(IDemoService.class);
+        consumerConfig.setRegistry(registryConfig);
+
         ServiceLoader<Registry> serviceLoader = ServiceLoaderFactory.getExtensionLoader(Registry.class);
         Registry registry = serviceLoader.getInstance("zookeeper",//
                 new Class[]{RegistryConfig.class}, new RegistryConfig[]{registryConfig});
@@ -88,12 +93,13 @@ public class TestZookeeperRegistry {
             public void update(ProviderGroup providerGroup) {
                 System.out.println("providerGroup:" + providerGroup);
             }
+
+            @Override
+            public String getServiceName() {
+                return consumerConfig.getServiceName();
+            }
         });
         registry.start();
-        ConsumerConfig<IDemoService> consumerConfig = new ConsumerConfig<>();
-        consumerConfig.setAppName("hello-consumer");
-        consumerConfig.setInterfaceClass(IDemoService.class);
-        consumerConfig.setRegistry(registryConfig);
         registry.subscribe(consumerConfig);
 
         System.in.read();

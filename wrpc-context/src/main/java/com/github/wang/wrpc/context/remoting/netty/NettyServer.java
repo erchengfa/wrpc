@@ -48,9 +48,10 @@ public class NettyServer implements Server {
         this.serverConfig = serverConfig;
         this.inetSocketAddress = new InetSocketAddress(serverConfig.getHost(),serverConfig.getPort());
         eventDisruptor = new EventDisruptor(serverConfig.getMessageHandleThreadSize(),serverConfig.getRingBufferSize());
+        open();
     }
 
-    public void doOpen(){
+    private  void doOpen(){
         bootstrap = new ServerBootstrap();
 
         bossGroup = new NioEventLoopGroup(1, new DefaultThreadFactory("NettyServerBoss", true));
@@ -85,14 +86,13 @@ public class NettyServer implements Server {
         channel = channelFuture.channel();
     }
 
-    @Override
     public void open() {
         this.doOpen();
     }
 
     @Override
-    public void registerServiceHanler(MessageHandler serviceHandler) {
-        eventDisruptor.registerServiceHanler(serviceHandler);
+    public void registerServiceBean(String serviceName,Object serviceBean){
+        eventDisruptor.registerServiceBean(serviceName,serviceBean);
     }
 
 }

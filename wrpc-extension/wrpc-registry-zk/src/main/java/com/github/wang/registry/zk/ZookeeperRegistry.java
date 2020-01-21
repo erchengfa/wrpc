@@ -23,10 +23,7 @@ import org.apache.curator.framework.CuratorFramework;
 import org.apache.curator.framework.CuratorFrameworkFactory;
 import org.apache.curator.framework.api.ACLProvider;
 import org.apache.curator.framework.imps.CuratorFrameworkState;
-import org.apache.curator.framework.recipes.cache.ChildData;
-import org.apache.curator.framework.recipes.cache.PathChildrenCache;
-import org.apache.curator.framework.recipes.cache.PathChildrenCacheEvent;
-import org.apache.curator.framework.recipes.cache.PathChildrenCacheListener;
+import org.apache.curator.framework.recipes.cache.*;
 import org.apache.curator.framework.state.ConnectionState;
 import org.apache.curator.framework.state.ConnectionStateListener;
 import org.apache.curator.retry.ExponentialBackoffRetry;
@@ -41,7 +38,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
-import java.util.concurrent.CopyOnWriteArrayList;
 
 import static com.github.wang.wrpc.common.utils.StringUtils.CONTEXT_SEP;
 
@@ -54,30 +50,20 @@ import static com.github.wang.wrpc.common.utils.StringUtils.CONTEXT_SEP;
 public class ZookeeperRegistry extends Registry {
 
     /**
-     * 保存服务发布者的url
-     */
-    private ConcurrentMap<ProviderConfig, List<String>> providerUrls = new ConcurrentHashMap<ProviderConfig, List<String>>();
-
-
-    /**
-     * 保存服务消费者的url
-     */
-    private ConcurrentMap<ConsumerConfig, String> consumerUrls = new ConcurrentHashMap<ConsumerConfig, String>();
-
-
-    /**
      * 接口配置{ConsumerConfig：PathChildrenCache} <br>
      * 例如：{ConsumerConfig ： PathChildrenCache }
      */
     private static final ConcurrentMap<ConsumerConfig, PathChildrenCache> INTERFACE_PROVIDER_CACHE = new ConcurrentHashMap<ConsumerConfig, PathChildrenCache>();
 
 
+    private static final ConcurrentMap<ConsumerConfig, NodeCache> INTERFACE_CONSUMER_CACHE = new ConcurrentHashMap<ConsumerConfig, NodeCache >();
+
     /**
      * Zookeeper zkClient
      */
     private CuratorFramework zkClient;
 
-    private CopyOnWriteArrayList<ProviderObserver> observers = new CopyOnWriteArrayList<>();
+    private ConcurrentHashMap<String,ProviderObserver> observers = new ConcurrentHashMap<>();
 
     /**
      * 注册中心配置
@@ -247,7 +233,7 @@ public class ZookeeperRegistry extends Registry {
 
     public ProviderGroup toProviderGoup(ConsumerConfig config,String providerPath, List<ChildData> childDataList){
         ProviderGroup providerGroup = new ProviderGroup();
-        providerGroup.setInterfaceName(config.getInterfaceName());
+        providerGroup.setServiceName(config.getServiceName());
         List<ProviderInfo> providerInfos = toProviderInfos(config,providerPath, childDataList);
         providerGroup.setProviderInfos(providerInfos);
         return providerGroup;
@@ -255,13 +241,11 @@ public class ZookeeperRegistry extends Registry {
 
     @Override
     public void registerObserver(ProviderObserver providerObserver) {
-        observers.add(providerObserver);
+        observers.put(providerObserver.getServiceName(),providerObserver);
     }
 
     public void notifyObserver(ProviderGroup providerGroup){
-        for (ProviderObserver providerObserver: observers){
-            providerObserver.update(providerGroup);
-        }
+        observers.get(providerGroup.getServiceName()).update(providerGroup);
     }
 
 
@@ -298,17 +282,42 @@ public class ZookeeperRegistry extends Registry {
         // 注册Consumer节点
         String url = null;
         try {
-            String consumerPath = RegistryUtils.buildConsumerPath(config.getInterfaceName(),config.getServiceVersion());
-            if (consumerUrls.containsKey(config)) {
-                url = consumerUrls.get(config);
-            } else {
-                url = RegistryUtils.convertConsumerToUrl(config);
-                consumerUrls.put(config, url);
-            }
+            String consumerPath = RegistryUtils.buildConsumerPath(config.getServiceName());
+            url = RegistryUtils.convertConsumerToUrl(config);
             String encodeUrl = URLEncoder.encode(url, "UTF-8");
             getAndCheckZkClient().create().creatingParentContainersIfNeeded()
                     .withMode(CreateMode.EPHEMERAL) // Consumer临时节点
-                    .forPath(consumerPath + CONTEXT_SEP + encodeUrl);
+                    .forPath(consumerPath + CONTEXT_SEP + encodeUrl,config.convertData());
+
+            try {
+                NodeCache nodeCache = INTERFACE_CONSUMER_CACHE.get(config);
+                if (nodeCache == null) {
+                    nodeCache = new NodeCache(zkClient, consumerPath + CONTEXT_SEP + encodeUrl);
+                    final NodeCache finalNodeCache = nodeCache;
+                    nodeCache.getListenable().addListener(new NodeCacheListener(){
+
+                        @Override
+                        public void nodeChanged() throws Exception {
+                            // 节点发生变化，回调方法
+                            byte[] data = finalNodeCache.getCurrentData().getData();
+                            String dataJsonStr = new String(data);
+                            // getData()方法实现返回byte[]
+                            ConsumerConfig changeConsumerConfig = JSONUtils.parseObject(dataJsonStr, ConsumerConfig.class);
+                            config.setInvokeTimeout(changeConsumerConfig.getInvokeTimeout());
+                            config.setLoadBlance(changeConsumerConfig.getLoadBlance());
+                            config.setSerialization(changeConsumerConfig.getSerialization());
+                            config.setRetries(changeConsumerConfig.getRetries());
+                            log.info("consumer data change:{}",config);
+                        }
+                    });
+                    //StartMode.BUILD_INITIAL_CACHE同步初始化缓存数据
+                    finalNodeCache.start(true);
+                    INTERFACE_CONSUMER_CACHE.put(config, nodeCache);
+                }
+            } catch (Exception e) {
+                throw new RPCRuntimeException("Failed to subscribe provider from zookeeperRegistry!", e);
+            }
+
         } catch (KeeperException.NodeExistsException nodeExistsException) {
             if (log.isWarnEnabled()) {
                 log.warn("consumer has exists in zookeeper, consumer=" + url);

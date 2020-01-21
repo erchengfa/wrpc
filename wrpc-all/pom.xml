@@ -4,7 +4,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
         <artifactId>wrpc</artifactId>
-        <groupId>com.github.wang</groupId>
+        <groupId>com.github.wang.wrpc</groupId>
         <version>0.1.2-SNATHOST</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
@@ -14,37 +14,37 @@
     <dependencies>
 
         <dependency>
-            <groupId>com.github.wang</groupId>
+            <groupId>com.github.wang.wrpc</groupId>
             <artifactId>wrpc-context</artifactId>
             <version>${project.parent.version}</version>
         </dependency>
 
         <dependency>
-            <groupId>com.github.wang</groupId>
+            <groupId>com.github.wang.wrpc</groupId>
             <artifactId>wrpc-protocol-wang</artifactId>
             <version>${project.parent.version}</version>
         </dependency>
 
         <dependency>
-            <groupId>com.github.wang</groupId>
+            <groupId>com.github.wang.wrpc</groupId>
             <artifactId>wrpc-kyro</artifactId>
             <version>${project.parent.version}</version>
         </dependency>
 
         <dependency>
-            <groupId>com.github.wang</groupId>
+            <groupId>com.github.wang.wrpc</groupId>
             <artifactId>wrpc-registry-zk</artifactId>
             <version>${project.parent.version}</version>
         </dependency>
 
         <dependency>
-            <groupId>com.github.wang</groupId>
+            <groupId>com.github.wang.wrpc</groupId>
             <artifactId>wrpc-cluster</artifactId>
             <version>${project.parent.version}</version>
         </dependency>
 
         <dependency>
-            <groupId>com.github.wang</groupId>
+            <groupId>com.github.wang.wrpc</groupId>
             <artifactId>wrpc-filter</artifactId>
             <version>${project.parent.version}</version>
         </dependency>

@@ -21,7 +21,7 @@ public class RegistryUtils {
         return "/wrpc/" + serviceName + "/providers";
 
     }
-    public static String buildConsumerPath( String serviceName,String version) {
+    public static String buildConsumerPath( String serviceName) {
         return "/wrpc/" + serviceName + "/consumers";
     }
     public static List<ProviderInfo> convertProviderInfos(ProviderConfig providerConfig) {
@@ -85,9 +85,8 @@ public class RegistryUtils {
         StringBuilder sb = new StringBuilder(200);
         String host = SystemInfo.getLocalHost();
         sb.append(consumerConfig.getProtocol()).append("://").append(host).append("?")//
-                .append(RegistryUtils.getKeyPairs(RpcConstants.CONFIG_KEY_APP_NAME, consumerConfig.getAppName()))
-                .append(getKeyPairs(RpcConstants.CONFIG_KEY_SERIALIZATION,
-                        consumerConfig.getSerialization()));
+                .append(RpcConstants.CONFIG_KEY_APP_NAME).append("=").append(consumerConfig.getAppName())
+                .append("&time=").append(System.currentTimeMillis());
         return sb.toString();
     }
 
