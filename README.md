@@ -4,17 +4,17 @@
 
 1、基于Netty通信：断线重连、长连接、心跳机制。
 
-1、spi机制可扩展。
+2、spi机制可扩展。
 
-2、采用高性能框架Disrupor对消息进行处理。
+3、采用高性能框架Disrupor对消息进行处理。
 
-3、序列化方式：kryo
+4、序列化方式：kryo
 
-4、集群机制：failover（失败重试）、failfast(快速失败)
+5、集群机制：failover（失败重试）、failfast(快速失败)
 
-5、负载均衡：random（加权随机）、roundrobin（轮训）
+6、负载均衡：random（加权随机）、roundrobin（轮训）
 
-6、注册中心支持：zookeeper
+7、注册中心支持：zookeeper
 
 
 
