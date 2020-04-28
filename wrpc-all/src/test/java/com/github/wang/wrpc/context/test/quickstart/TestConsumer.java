@@ -27,7 +27,7 @@ public class TestConsumer {
         while (true){
             try {
                 System.out.println(iDemoService.sayHello("wang"));
-                Thread.sleep(1000);
+                //Thread.sleep(1000);
             }catch (Exception e){
 
             }
