@@ -52,7 +52,7 @@ public class RpcReferenceBeanPostProcessor implements BeanPostProcessor, Applica
             try {
                 field.set(bean, consumerConfigConcurrentHashMap.get(serviceName).refer());
             } catch (IllegalAccessException e) {
-                log.error("nrpc error:", e);
+                log.error("wrpc error:", e);
             }
         }
         return bean;
