@@ -20,9 +20,9 @@ public class EventDisruptor {
 
     private Disruptor<MessageEvent> disruptor;
 
-    private  ConcurrentHashMap<String, Object> serviceBeanMap = new ConcurrentHashMap<>();
+    private ConcurrentHashMap<String, Object> serviceBeanMap = new ConcurrentHashMap<>();
 
-    public EventDisruptor(int messageHandleThreadSize,int ringBufferSize){
+    public EventDisruptor(int messageHandleThreadSize, int ringBufferSize) {
         ThreadPoolExecutor threadPoolExecutor = ThreadPoolUtils.newFixedThreadPool(messageHandleThreadSize);
         disruptor = new Disruptor<MessageEvent>(
                 new EventFactory<MessageEvent>() {
@@ -32,35 +32,33 @@ public class EventDisruptor {
                 },
                 ringBufferSize,
                 threadPoolExecutor,
-                ProducerType.SINGLE,
+                ProducerType.MULTI,
                 new BlockingWaitStrategy());
-
         EventWorkHandler[] eventWorkHandlers = new EventWorkHandler[messageHandleThreadSize];
-        for (int i = 0; i < eventWorkHandlers.length; i++){
-            eventWorkHandlers[i] =  new EventWorkHandler(serviceBeanMap);
+        for (int i = 0; i < eventWorkHandlers.length; i++) {
+            eventWorkHandlers[i] = new EventWorkHandler(serviceBeanMap);
         }
         disruptor.handleEventsWithWorkerPool(eventWorkHandlers);
-
     }
 
-    public void publishEvent(MessageEvent messageEvent){
-            disruptor.publishEvent(new EventTranslator<MessageEvent>() {
-                @Override
-                public void translateTo(MessageEvent event, long sequence) {
-                    event.setSequence(sequence);
-                    event.setChannel(messageEvent.getChannel());
-                    event.setRequest(messageEvent.getRequest());
-                }
-            });
+    public void publishEvent(MessageEvent messageEvent) {
+        disruptor.publishEvent(new EventTranslator<MessageEvent>() {
+            @Override
+            public void translateTo(MessageEvent event, long sequence) {
+                event.setSequence(sequence);
+                event.setChannel(messageEvent.getChannel());
+                event.setRequest(messageEvent.getRequest());
+            }
+        });
     }
 
 
-    public void registerServiceBean(String serviceName,Object serviceBean){
-        serviceBeanMap.put(serviceName,serviceBean);
+    public void registerServiceBean(String serviceName, Object serviceBean) {
+        serviceBeanMap.put(serviceName, serviceBean);
     }
 
-    public void start(){
-       // 启动disruptor
+    public void start() {
+        // 启动disruptor
         disruptor.start();
     }
 
