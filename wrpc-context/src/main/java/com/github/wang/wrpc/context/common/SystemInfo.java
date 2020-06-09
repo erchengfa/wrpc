@@ -3,10 +3,6 @@ package com.github.wang.wrpc.context.common;
 import com.github.wang.wrpc.common.utils.NetUtils;
 import com.github.wang.wrpc.common.utils.StringUtils;
 
-/**
- * @author : wang
- * @date : 2020/1/5
- */
 public class SystemInfo {
 
     /**

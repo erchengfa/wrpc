@@ -2,10 +2,7 @@ package com.github.wang.wrpc.context.test.remoting.netty;
 
 import com.github.wang.wrpc.common.utils.BitUtil;
 
-/**
- * @author : wang
- * @date : 2019/12/25
- */
+
 public class TestBit {
     protected static final byte FLAG_REQUEST = (byte) 0x80;
     protected static final byte FLAG_TWOWAY = (byte) 0x40;

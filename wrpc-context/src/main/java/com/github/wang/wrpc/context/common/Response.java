@@ -3,10 +3,7 @@ package com.github.wang.wrpc.context.common;
 import com.github.wang.wrpc.context.config.RpcDefaultConfig;
 import lombok.Data;
 
-/**
- * @author : wang
- * @date : 2019/12/25
- */
+
 @Data
 public class Response {
 

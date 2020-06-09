@@ -7,10 +7,7 @@ import com.github.wang.wrpc.context.config.ServerConfig;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-/**
- * @author : wang
- * @date : 2020/1/21
- */
+
 @Configuration
 public class WRPCConfig {
 

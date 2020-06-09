@@ -2,10 +2,6 @@ package com.github.wang.wrpc.context.test.service;
 
 import com.github.wang.wrpc.context.annotation.WRpcMethod;
 
-/**
- * @author : wang
- * @date : 2020/1/11
- */
 public interface IDemoService {
 
 

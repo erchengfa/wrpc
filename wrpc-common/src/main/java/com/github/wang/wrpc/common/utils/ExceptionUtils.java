@@ -3,9 +3,7 @@ package com.github.wang.wrpc.common.utils;
 
 import com.github.wang.wrpc.common.exception.RPCRuntimeException;
 
-/**
- * 异常工具类
- */
+
 public final class ExceptionUtils {
 
     public static RPCRuntimeException buildRuntime(String configKey, String configValue) {

@@ -13,10 +13,7 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
 
-/**
- * @author : wang
- * @date : 2019/12/29
- */
+
 @Slf4j
 public class DefaultFuture extends CompletableFuture<Object> {
 

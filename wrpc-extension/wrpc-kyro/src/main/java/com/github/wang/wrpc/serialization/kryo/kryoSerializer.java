@@ -10,10 +10,7 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
-/**
- * @author : wang
- * @date : 2019/12/27
- */
+
 public class kryoSerializer implements Serializer {
 
     private static AbstractKryoFactory kryoFactory = new ThreadLocalKryoFactory();

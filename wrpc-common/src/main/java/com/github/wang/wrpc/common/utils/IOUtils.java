@@ -4,9 +4,7 @@ import java.io.Closeable;
 import java.net.ServerSocket;
 import java.net.Socket;
 
-/**
- * IO工具类
- */
+
 public class IOUtils {
 
     /**

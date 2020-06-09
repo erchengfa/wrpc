@@ -4,10 +4,6 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-/**
- * @author : wang
- * @date : 2020/1/20
- */
 @Configuration
 public class WRPCAutoConfiguration {
 

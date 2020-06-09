@@ -2,10 +2,7 @@ package com.github.wang.wrpc.context.config;
 
 import com.github.wang.wrpc.context.common.SerializationConstants;
 
-/**
- * @author : wang
- * @date : 2020/1/8
- */
+
 public class RpcDefaultConfig {
 
     /**

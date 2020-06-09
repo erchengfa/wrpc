@@ -13,10 +13,7 @@ import com.github.wang.wrpc.context.observer.ProviderObserver;
 import com.github.wang.wrpc.context.proxy.InvocationProxy;
 import lombok.extern.slf4j.Slf4j;
 
-/**
- * @author : wang
- * @date : 2020/1/10
- */
+
 @Slf4j
 public class ConsumeApplicationContext{
 

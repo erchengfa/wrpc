@@ -2,10 +2,7 @@ package com.github.wang.wrpc.context.common;
 
 import lombok.Data;
 
-/**
- * @author : wang
- * @date : 2019/12/27
- */
+
 @Data
 public class Invocation {
 

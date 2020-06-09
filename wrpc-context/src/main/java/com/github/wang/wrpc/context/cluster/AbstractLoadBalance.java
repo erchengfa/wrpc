@@ -5,10 +5,7 @@ import com.github.wang.wrpc.context.consumer.RpcInvoker;
 
 import java.util.List;
 
-/**
- * @author : wang
- * @date : 2020/1/12
- */
+
 public abstract class AbstractLoadBalance implements LoadBalance{
 
     @Override

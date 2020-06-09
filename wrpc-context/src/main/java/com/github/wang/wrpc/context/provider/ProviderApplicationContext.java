@@ -12,11 +12,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
 
 import java.util.List;
-
-/**
- * @author : wang
- * @date : 2020/1/10
- */
 @Slf4j
 public class ProviderApplicationContext{
 

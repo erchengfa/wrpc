@@ -42,10 +42,7 @@ import java.util.concurrent.ConcurrentMap;
 import static com.github.wang.wrpc.common.utils.StringUtils.CONTEXT_SEP;
 
 
-/**
- * @author : wang
- * @date : 2020/1/6
- */
+
 @Slf4j
 public class ZookeeperRegistry extends Registry {
 

@@ -12,10 +12,7 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * @author : wang
- * @date : 2020/1/5
- */
+
 @Data
 public class ConsumerConfig<T> {
 

@@ -7,10 +7,7 @@ import org.junit.Test;
 
 import java.io.IOException;
 
-/**
- * @author : wang
- * @date : 2020/1/11
- */
+
 public class TestConsumer {
 
     @Test

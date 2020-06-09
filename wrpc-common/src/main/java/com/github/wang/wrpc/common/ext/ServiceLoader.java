@@ -15,10 +15,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
 
-/**
- * @author : wang
- * @date : 2020/1/8
- */
+
 @Slf4j
 public class ServiceLoader<T> {
 

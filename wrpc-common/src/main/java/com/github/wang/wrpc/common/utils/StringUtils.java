@@ -4,9 +4,7 @@ import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * 字符串操作工具类
- */
+
 public class StringUtils {
 
     /**

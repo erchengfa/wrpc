@@ -1,9 +1,5 @@
 package com.github.wang.wrpc.common.exception;
 
-/**
- * @author : wang
- * @date : 2019/12/29
- */
 public class RPCRuntimeException extends RuntimeException {
     private int code;
     private String msg;

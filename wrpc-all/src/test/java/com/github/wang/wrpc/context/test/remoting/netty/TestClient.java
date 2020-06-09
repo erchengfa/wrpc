@@ -7,10 +7,7 @@ import com.github.wang.wrpc.context.remoting.DefaultFuture;
 import com.github.wang.wrpc.context.remoting.netty.NettyClient;
 
 
-/**
- * @author : wang
- * @date : 2019/12/29
- */
+
 public class TestClient {
 
     public static void main(String[] args) throws Throwable {

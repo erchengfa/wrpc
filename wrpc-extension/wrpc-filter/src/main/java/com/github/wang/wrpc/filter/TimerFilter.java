@@ -6,10 +6,6 @@ import com.github.wang.wrpc.context.common.WRPCResult;
 import com.github.wang.wrpc.context.filter.Filter;
 import lombok.extern.slf4j.Slf4j;
 
-/**
- * @author : wang
- * @date : 2020/1/19
- */
 @Slf4j
 public class TimerFilter extends Filter {
     @Override

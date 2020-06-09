@@ -10,10 +10,6 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-/**
- * @author : wang
- * @date : 2020/1/20
- */
 public class WRPCSpringBootstrap implements ApplicationContextAware,InitializingBean {
 
     private Set<ProviderConfig> providerConfigs;

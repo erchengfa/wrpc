@@ -4,10 +4,6 @@ import com.github.wang.wrpc.common.exception.RPCRuntimeException;
 import com.github.wang.wrpc.common.utils.ClassUtils;
 import lombok.Data;
 
-/**
- * @author : wang
- * @date : 2020/1/8
- */
 @Data
 public class SpiClassInfo<T> {
 
@@ -15,9 +11,9 @@ public class SpiClassInfo<T> {
     protected final Class<? extends T> clazz;
 
 
-    private volatile transient T       instance;
+    private volatile transient T instance;
 
-    protected boolean                  singleton;
+    protected boolean singleton;
 
 
     public SpiClassInfo(Class<? extends T> clazz) {
@@ -25,8 +21,8 @@ public class SpiClassInfo<T> {
     }
 
 
-    public T getSpiInstance(){
-        return getSpiInstance(null,null);
+    public T getSpiInstance() {
+        return getSpiInstance(null, null);
     }
 
     public T getSpiInstance(Class[] argTypes, Object[] args) {

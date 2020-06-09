@@ -2,23 +2,6 @@ package com.github.wang.wrpc.common.utils;
 
 import com.github.wang.wrpc.common.cache.ReflectCache;
 
-/**
- * <p>类型转换工具类</p>
- * <p>调用端时将类描述转换为字符串传输。服务端将字符串转换为具体的类</p>
- * <pre>
- *     保证传递的时候值为可阅读格式，而不是jvm格式（[Lxxx;）：
- *     普通：java.lang.String、java.lang.String[]
- *     基本类型：int、int[]
- *     内部类：com.alipay.example.Inner、com.alipay.example.Inner[]
- *     匿名类：com.alipay.example.Xxx$1、com.alipay.example.Xxx$1[]
- *     本地类：com.alipay.example.Xxx$1Local、com.alipay.example.Xxx$1Local[]
- *     成员类：com.alipay.example.Xxx$Member、com.alipay.example.Xxx$Member[]
- * 同时Class.forName的时候又会解析出Class。
- * </pre>
- * <p>
- *
- * @author <a href=mailto:zhanggeng.zg@antfin.com>GengZhang</a>
- */
 public class ClassTypeUtils {
 
     /**

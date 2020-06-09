@@ -4,10 +4,7 @@ import com.github.wang.wrpc.common.exception.RPCRuntimeException;
 import com.github.wang.wrpc.context.remoting.DefaultFuture;
 import lombok.Data;
 
-/**
- * @author : wang
- * @date : 2020/1/16
- */
+
 @Data
 public class WRPCFutureResult implements WRPCResult {
 

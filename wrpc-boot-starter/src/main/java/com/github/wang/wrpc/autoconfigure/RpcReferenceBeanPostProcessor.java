@@ -14,10 +14,7 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-/**
- * @author : wang
- * @date : 2020/1/20
- */
+
 @Slf4j
 public class RpcReferenceBeanPostProcessor implements BeanPostProcessor, ApplicationContextAware {
 

@@ -15,10 +15,7 @@ import lombok.extern.slf4j.Slf4j;
 import java.lang.reflect.Method;
 import java.util.List;
 
-/**
- * @author : wang
- * @date : 2020/1/14
- */
+
 @Slf4j
 public class RpcInvoker implements Invoker {
 

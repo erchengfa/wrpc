@@ -13,9 +13,7 @@ import java.util.List;
 
 import static com.github.wang.wrpc.common.utils.ClassLoaderUtils.getCurrentClassLoader;
 
-/**
- * Class工具类
- */
+
 public final class ClassUtils {
 
     /**

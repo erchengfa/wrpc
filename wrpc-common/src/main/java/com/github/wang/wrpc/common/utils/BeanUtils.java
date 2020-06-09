@@ -11,9 +11,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
-/**
- * Bean的一些操作
- */
 public class BeanUtils {
 
     /**

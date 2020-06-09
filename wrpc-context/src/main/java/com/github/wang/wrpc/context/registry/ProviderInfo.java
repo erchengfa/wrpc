@@ -6,10 +6,7 @@ import lombok.Data;
 
 import java.io.Serializable;
 
-/**
- * @author : wang
- * @date : 2020/1/6
- */
+
 @Data
 public class ProviderInfo implements Serializable {
 

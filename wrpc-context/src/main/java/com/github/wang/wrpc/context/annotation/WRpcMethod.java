@@ -2,10 +2,7 @@ package com.github.wang.wrpc.context.annotation;
 
 import java.lang.annotation.*;
 
-/**
- * @author : wang
- * @date : 2020/1/17
- */
+
 @Documented
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ElementType.METHOD})

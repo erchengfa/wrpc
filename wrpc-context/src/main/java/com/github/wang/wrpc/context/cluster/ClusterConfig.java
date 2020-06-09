@@ -7,10 +7,7 @@ import com.github.wang.wrpc.context.consumer.RpcInvokerHolder;
 
 import java.util.List;
 
-/**
- * @author : wang
- * @date : 2020/1/16
- */
+
 public class ClusterConfig {
 
     private RpcInvokerHolder rpcInvokerHolder;

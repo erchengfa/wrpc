@@ -16,10 +16,7 @@ import org.junit.Test;
 
 import java.io.IOException;
 
-/**
- * @author : wang
- * @date : 2020/1/6
- */
+
 public class TestZookeeperRegistry {
 
 

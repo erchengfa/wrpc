@@ -5,10 +5,7 @@ import lombok.Data;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-/**
- * @author : wang
- * @date : 2020/1/5
- */
+
 @Data
 public class RegistryConfig {
 

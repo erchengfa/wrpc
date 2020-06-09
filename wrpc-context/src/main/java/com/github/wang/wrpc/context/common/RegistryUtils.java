@@ -11,10 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-/**
- * @author : wang
- * @date : 2020/1/6
- */
+
 public class RegistryUtils {
 
     public static String buildProviderPath(String serviceName) {

@@ -7,10 +7,7 @@ import com.github.wang.wrpc.context.remoting.netty.NettyServer;
 
 import java.io.IOException;
 
-/**
- * @author : wang
- * @date : 2019/12/29
- */
+
 public class TestServer {
 
 

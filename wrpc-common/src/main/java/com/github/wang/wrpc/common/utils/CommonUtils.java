@@ -6,9 +6,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentMap;
 
-/**
- * 一些通用方法
- */
+
 public class CommonUtils {
 
     /**

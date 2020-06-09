@@ -10,10 +10,7 @@ import org.junit.Test;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * @author : wang
- * @date : 2019/12/27
- */
+
 public class TestCodec {
 
     @Test

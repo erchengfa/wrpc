@@ -8,10 +8,7 @@ import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
 
-/**
- * @author : wang
- * @date : 2020/1/12
- */
+
 @Slf4j
 public class InvocationProxy<T> {
 

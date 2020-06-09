@@ -3,10 +3,7 @@ package com.github.wang.wrpc.common.ext;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
-/**
- * @author : wang
- * @date : 2020/1/8
- */
+
 public class ServiceLoaderFactory {
 
     private static final ConcurrentMap<Class, ServiceLoader> LOADER_MAP = new ConcurrentHashMap<Class, ServiceLoader>();

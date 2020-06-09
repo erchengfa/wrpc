@@ -3,10 +3,7 @@ package com.github.wang.wrpc.serialization.kryo;
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryo.pool.KryoPool;
 
-/**
- * @author : wang
- * @date : 2019/12/27
- */
+
 public class PooledKryoFactory extends AbstractKryoFactory {
 
     private KryoPool pool;

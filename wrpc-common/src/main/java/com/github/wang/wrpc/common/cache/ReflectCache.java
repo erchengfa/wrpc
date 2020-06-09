@@ -24,13 +24,6 @@ import java.util.WeakHashMap;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
-/**
- * 业务要支持多ClassLoader，需要缓存ClassLoader或者方法等相关信息
- * <p>
- * // TODO 统一的回收实效策略，例如大小限制、时间限制、哪些可以被回收
- *
- * @author <a href="mailto:zhanggeng.zg@antfin.com">GengZhang</a>
- */
 public final class ReflectCache {
 
     /*----------- ClassLoader Cache ------------*/

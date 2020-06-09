@@ -5,10 +5,7 @@ import lombok.Data;
 
 import java.util.concurrent.atomic.AtomicLong;
 
-/**
- * @author : wang
- * @date : 2019/12/24
- */
+
 @Data
 public class Request {
 

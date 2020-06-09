@@ -7,10 +7,7 @@ import com.github.wang.wrpc.context.consumer.RpcInvoker;
 import java.util.List;
 import java.util.Random;
 
-/**
- * @author : wang
- * @date : 2020/1/12
- */
+
 public class RandomLoadBalancer extends AbstractLoadBalance {
 
     private final Random random = new Random();

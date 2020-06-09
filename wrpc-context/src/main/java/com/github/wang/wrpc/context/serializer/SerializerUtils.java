@@ -8,10 +8,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-/**
- * @author : wang
- * @date : 2020/1/17
- */
+
 public class SerializerUtils {
 
     public static Map<Byte,Serializer> serializerMap = new HashMap<Byte,Serializer>();

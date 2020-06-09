@@ -7,10 +7,7 @@ import io.netty.channel.ChannelHandlerContext;
 import java.io.IOException;
 import java.util.List;
 
-/**
- * @author : wang
- * @date : 2019/12/25
- */
+
 @Spi
 public interface Codec {
 

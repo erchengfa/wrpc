@@ -11,10 +11,7 @@ import lombok.extern.slf4j.Slf4j;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ThreadPoolExecutor;
 
-/**
- * @author : wang
- * @date : 2020/1/10
- */
+
 @Slf4j
 public class EventDisruptor {
 

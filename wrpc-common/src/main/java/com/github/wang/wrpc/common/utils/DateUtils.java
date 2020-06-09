@@ -4,9 +4,6 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-/**
- * TODO 不要用 simpleDateFormat，有更快的
- */
 public class DateUtils {
 
     /**

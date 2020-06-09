@@ -5,10 +5,7 @@ import com.github.wang.wrpc.autoconfigure.annotation.RpcReference;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-/**
- * @author : wang
- * @date : 2020/1/21
- */
+
 @RestController
 public class HelloController {
 

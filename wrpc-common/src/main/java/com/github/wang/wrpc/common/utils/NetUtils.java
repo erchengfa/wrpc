@@ -11,10 +11,7 @@ import java.util.Enumeration;
 import java.util.List;
 import java.util.regex.Pattern;
 
-/**
- * @author : wang
- * @date : 2020/1/5
- */
+
 public class NetUtils {
 
     /**

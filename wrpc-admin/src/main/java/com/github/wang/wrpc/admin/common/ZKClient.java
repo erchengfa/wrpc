@@ -16,10 +16,7 @@ import org.apache.zookeeper.data.Stat;
 import java.util.Collections;
 import java.util.List;
 
-/**
- * @author : wang
- * @date : 2020/2/5
- */
+
 @Slf4j
 public class ZKClient {
     /**

@@ -4,10 +4,7 @@ package com.github.wang.wrpc.context.test.ext;
 import com.github.wang.wrpc.common.ext.ServiceLoader;
 import com.github.wang.wrpc.common.ext.ServiceLoaderFactory;
 
-/**
- * @author : wang
- * @date : 2019/12/31
- */
+
 public class SpiTest {
 
     public static void main(String[] args) {

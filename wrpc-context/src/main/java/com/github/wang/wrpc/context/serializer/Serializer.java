@@ -5,10 +5,7 @@ import com.github.wang.wrpc.common.ext.Spi;
 
 import java.io.IOException;
 
-/**
- * @author : wang
- * @date : 2019/12/27
- */
+
 @Spi
 public interface Serializer {
 

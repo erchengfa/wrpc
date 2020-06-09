@@ -18,10 +18,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 
-/**
- * @author : wang
- * @date : 2020/1/11
- */
+
 @Slf4j
 public class RpcInvokerHolder {
 

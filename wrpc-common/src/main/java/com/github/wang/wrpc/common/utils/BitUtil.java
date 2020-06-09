@@ -1,9 +1,6 @@
 package com.github.wang.wrpc.common.utils;
 
-/**
- * @author : wang
- * @date : 2019/12/26
- */
+
 public class BitUtil {
 
     //b为传入的字节，i为第几位（范围0-7），如要获取bit0，则i=0

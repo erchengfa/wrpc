@@ -2,9 +2,7 @@ package com.github.wang.wrpc.common.utils;
 
 import java.util.concurrent.*;
 
-/**
- * 线程池工具类
- */
+
 public class ThreadPoolUtils {
 
     /**

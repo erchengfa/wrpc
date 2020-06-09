@@ -5,10 +5,7 @@ import io.netty.channel.Channel;
 import lombok.Data;
 
 
-/**
- * @author : wang
- * @date : 2020/1/10
- */
+
 @Data
 public class MessageEvent {
     private long sequence;

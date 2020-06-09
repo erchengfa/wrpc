@@ -11,10 +11,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-/**
- * @author : wang
- * @date : 2020/1/19
- */
+
 public class FilterChain{
     public static List<Filter> filters = new ArrayList<>();
 

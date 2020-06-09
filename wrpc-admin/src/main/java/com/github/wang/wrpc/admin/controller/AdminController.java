@@ -9,10 +9,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
-/**
- * @author : wang
- * @date : 2020/2/5
- */
 @RestController
 public class AdminController {
 

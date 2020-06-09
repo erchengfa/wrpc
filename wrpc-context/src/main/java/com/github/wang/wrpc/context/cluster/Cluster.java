@@ -5,10 +5,7 @@ import com.github.wang.wrpc.context.common.Invocation;
 import com.github.wang.wrpc.context.common.Invoker;
 import com.github.wang.wrpc.context.common.WRPCResult;
 
-/**
- * @author : wang
- * @date : 2020/1/12
- */
+
 @Spi
 public abstract class Cluster implements Invoker {
 

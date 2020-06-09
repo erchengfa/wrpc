@@ -1,9 +1,7 @@
 package com.github.wang.wrpc.context.test.service;
 
-/**
- * @author : wang
- * @date : 2020/1/11
- */
+
+
 public class DemoServiceImpl implements IDemoService{
     @Override
     public void sayHello(String name, Integer age) {

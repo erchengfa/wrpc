@@ -6,10 +6,7 @@ import com.github.wang.wrpc.context.remoting.netty.NettyServer;
 import lombok.Data;
 
 
-/**
- * @author : wang
- * @date : 2020/1/5
- */
+
 @Data
 public class ServerConfig {
     /**

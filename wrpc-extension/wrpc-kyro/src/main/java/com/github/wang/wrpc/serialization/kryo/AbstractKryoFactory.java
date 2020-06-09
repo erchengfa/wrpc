@@ -15,10 +15,7 @@ import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.regex.Pattern;
 
-/**
- * @author : wang
- * @date : 2019/12/27
- */
+
 public abstract class AbstractKryoFactory implements KryoFactory {
 
 

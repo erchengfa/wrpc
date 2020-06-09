@@ -7,10 +7,7 @@ import com.github.wang.wrpc.context.config.RegistryConfig;
 import com.github.wang.wrpc.context.observer.ProviderObserver;
 
 
-/**
- * @author : wang
- * @date : 2020/1/5
- */
+
 @Spi(singleton = true)
 public abstract class Registry {
 

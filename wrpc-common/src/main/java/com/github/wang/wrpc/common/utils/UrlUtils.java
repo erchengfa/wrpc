@@ -7,10 +7,7 @@ import java.net.URI;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-/**
- * @author : wang
- * @date : 2020/1/11
- */
+
 @Slf4j
 public class UrlUtils {
     private final static String ENCODE = "UTF-8";

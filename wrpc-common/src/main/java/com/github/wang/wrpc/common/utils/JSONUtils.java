@@ -6,9 +6,7 @@ import com.alibaba.fastjson.JSONObject;
 
 import java.util.List;
 
-/**
- * 内置Json工具类
- */
+
 public final class JSONUtils {
 
     /**
