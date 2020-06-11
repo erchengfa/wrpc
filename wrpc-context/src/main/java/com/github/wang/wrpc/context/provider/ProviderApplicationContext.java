@@ -17,7 +17,6 @@ public class ProviderApplicationContext{
 
     private ProviderConfig providerConfig;
 
-
     private Registry registry;
 
     public ProviderApplicationContext(ProviderConfig providerConfig){

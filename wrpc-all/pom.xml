@@ -39,6 +39,12 @@
 
         <dependency>
             <groupId>com.github.wang.wrpc</groupId>
+            <artifactId>wrpc-registry-nacos</artifactId>
+            <version>${project.parent.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.github.wang.wrpc</groupId>
             <artifactId>wrpc-cluster</artifactId>
             <version>${project.parent.version}</version>
         </dependency>

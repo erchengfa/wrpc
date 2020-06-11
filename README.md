@@ -14,7 +14,7 @@
 
 6、负载均衡：random（加权随机）、roundrobin（轮训）
 
-7、注册中心支持：zookeeper
+7、注册中心支持：zookeeper、nacos
 
 
 

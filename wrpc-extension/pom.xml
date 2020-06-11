@@ -17,6 +17,7 @@
         <module>wrpc-registry-zk</module>
         <module>wrpc-cluster</module>
         <module>wrpc-filter</module>
+        <module>wrpc-registry-nacos</module>
     </modules>
 
 

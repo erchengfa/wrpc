@@ -66,6 +66,9 @@ public class RpcInvokerHolder {
 
     public synchronized void refresh(ProviderGroup providerGroup) {
         log.debug("rpc client poll refresh provider group:{}", providerGroup);
+        if (providerGroup == null){
+            return;
+        }
         List<ProviderInfo> providerInfos = providerGroup.getProviderInfos();
         List<String> newUrls = new ArrayList<>();
         removeRpcInvoker(providerInfos);

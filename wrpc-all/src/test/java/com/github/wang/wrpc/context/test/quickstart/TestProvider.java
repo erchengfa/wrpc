@@ -73,4 +73,27 @@ public class TestProvider {
 
     }
 
+
+    @Test
+    public void testNacos() throws IOException {
+        //注册中心
+        RegistryConfig registryConfig = new RegistryConfig();
+        registryConfig.setProtocol("nacos");//协议
+        registryConfig.setAddress("127.0.0.1:8848");//注册中心地址
+
+        //配置服务
+        ServerConfig serverConfig = new ServerConfig();
+        serverConfig.setPort(20801);        //设置端口
+
+        ProviderConfig<IDemoService> providerConfig = new ProviderConfig<>();
+        providerConfig.setAppName("demo1");//设置应用名
+        providerConfig.setInterfaceClass(IDemoService.class);//设置接口类
+        providerConfig.setServiceBean(new DemoServiceImpl());//设置服务实现类
+        providerConfig.setServer(serverConfig);//设置服务
+        providerConfig.setRegistry(registryConfig);//设置注册中心
+        providerConfig.export();//暴露服务
+        System.in.read();
+
+    }
+
 }
