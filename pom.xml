@@ -27,7 +27,6 @@
         <module>wrpc-extension</module>
         <module>wrpc-context</module>
         <module>wrpc-all</module>
-        <module>wrpc-admin</module>
         <module>wrpc-boot-starter</module>
         <module>wrpc-example</module>
     </modules>
