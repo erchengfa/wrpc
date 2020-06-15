@@ -14,7 +14,7 @@
         <java.version>1.8</java.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <version.commons-lang>3.3.2</version.commons-lang>
-        <version.commons-collections>4.0</version.commons-collections>
+        <version.commons-collections>4.1</version.commons-collections>
         <version.zookeeper>3.4.6</version.zookeeper>
         <version.zkclient>0.4</version.zkclient>
         <jackson.version>2.9.8</jackson.version>
