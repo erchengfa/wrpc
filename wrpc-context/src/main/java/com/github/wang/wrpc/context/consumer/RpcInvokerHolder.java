@@ -1,22 +1,19 @@
 package com.github.wang.wrpc.context.consumer;
 
 import com.github.wang.wrpc.common.exception.RPCRuntimeException;
-import com.github.wang.wrpc.common.utils.ThreadPoolUtils;
+import com.github.wang.wrpc.context.common.GlobalExecutor;
 import com.github.wang.wrpc.context.common.Invocation;
 import com.github.wang.wrpc.context.config.ConsumerConfig;
 import com.github.wang.wrpc.context.registry.ProviderGroup;
 import com.github.wang.wrpc.context.registry.ProviderInfo;
-import com.github.wang.wrpc.context.timer.TimerManager;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
 
+import javax.annotation.PostConstruct;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.TimerTask;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.LinkedBlockingQueue;
-import java.util.concurrent.ThreadPoolExecutor;
 
 
 @Slf4j
@@ -24,44 +21,29 @@ public class RpcInvokerHolder {
 
     private static Map<String, RpcInvoker> aliveRpcInvokerMap = new ConcurrentHashMap<>();
 
-    private static ThreadPoolExecutor rpcInkokerPoolExecutor = ThreadPoolUtils.newFixedThreadPool(8,new LinkedBlockingQueue<>(10000));
-
     private List<String> urls = new ArrayList<>();
 
     private ProviderGroup providerGroup;
 
     private ConsumeApplicationContext context;
 
-    //定义开始等待时间  ---
-    private static final long DELAY = 1000 * 30;
-    //间隔时间
-    private static final long INTEVAL_PERIOD = 1000 * 30;
-
-    static {
-        TimerTask task = new TimerTask() {
-            @Override
-            public void run() {
-                for (String url : aliveRpcInvokerMap.keySet()){
-                    RpcInvoker rpcInvoker = aliveRpcInvokerMap.get(url);
-                    if(rpcInvoker.isDead()){
-                        log.error("RpcInvokerHolder dead rpc invoker:{}",rpcInvoker);
-                    }else if (!rpcInvoker.isActive()){
-                        rpcInkokerPoolExecutor.submit(new Runnable() {
-                            @Override
-                            public void run() {
-                                log.debug("wrpc aliveRpcInvokerMap check reconnect:{}",rpcInvoker);
-                                rpcInvoker.connect();
-                            }
-                        });
-                    }
-                }
-            }
-        };
-        TimerManager.registerTimerTask(task, DELAY, INTEVAL_PERIOD);
-    }
-
     public RpcInvokerHolder(ConsumeApplicationContext context) {
         this.context = context;
+    }
+
+    @PostConstruct
+    public void init(){
+        GlobalExecutor.registerTaskToTimer(()->{
+            for (String url : aliveRpcInvokerMap.keySet()){
+                RpcInvoker rpcInvoker = aliveRpcInvokerMap.get(url);
+                if(rpcInvoker.isDead()){
+                    log.error("RpcInvokerHolder dead rpc invoker:{}",rpcInvoker);
+                }else if (!rpcInvoker.isActive()){
+                    log.debug("wrpc aliveRpcInvokerMap check reconnect:{}",rpcInvoker);
+                    rpcInvoker.connect();
+                }
+            }
+        });
     }
 
     public synchronized void refresh(ProviderGroup providerGroup) {
@@ -80,12 +62,9 @@ public class RpcInvokerHolder {
                 rpcInvoker.updateProviderInfo(providerInfo);
             }
             RpcInvoker finalRpcInvoker = rpcInvoker;
-            rpcInkokerPoolExecutor.submit(new Runnable() {
-                @Override
-                public void run() {
-                    finalRpcInvoker.connect();
-                    aliveRpcInvokerMap.put(providerInfo.getUrl(), finalRpcInvoker);
-                }
+            GlobalExecutor.registerTaskToPool(()->{
+                finalRpcInvoker.connect();
+                aliveRpcInvokerMap.put(providerInfo.getUrl(), finalRpcInvoker);
             });
             newUrls.add(providerInfo.getUrl());
         }

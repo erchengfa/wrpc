@@ -27,6 +27,7 @@ public class TestProvider {
         providerConfig.setAppName("demo1");//设置应用名
         providerConfig.setInterfaceClass(IDemoService.class);//设置接口类
         providerConfig.setServiceBean(new DemoServiceImpl());//设置服务实现类
+        providerConfig.setServiceVersion("1.0");
         providerConfig.setServer(serverConfig);//设置服务
         providerConfig.setRegistry(registryConfig);//设置注册中心
         providerConfig.export();//暴露服务
