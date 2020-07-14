@@ -10,8 +10,13 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class WRPCConfig {
 
+    /**
+     * 配置注册中心
+     *
+     * @return
+     */
     @Bean
-    public RegistryConfig registryConfig(){
+    public RegistryConfig registryConfig() {
         RegistryConfig registryConfig = new RegistryConfig();
         registryConfig.setProtocol("zookeeper");
         registryConfig.setAddress("118.89.196.99:2181");
@@ -19,8 +24,13 @@ public class WRPCConfig {
     }
 
 
+    /**
+     * 配置消费的服务
+     *
+     * @return
+     */
     @Bean
-    public ConsumerConfig helloService(){
+    public ConsumerConfig helloService() {
         ConsumerConfig<IHelloService> consumerConfig = new ConsumerConfig<>();
         consumerConfig.setInterfaceClass(IHelloService.class);
         consumerConfig.setRegistry(registryConfig());
@@ -28,8 +38,13 @@ public class WRPCConfig {
         return consumerConfig;
     }
 
+    /**
+     * 配置消费的服务 版本号为v2
+     *
+     * @return
+     */
     @Bean
-    public ConsumerConfig helloService2(){
+    public ConsumerConfig helloService2() {
         ConsumerConfig<IHelloService> consumerConfig = new ConsumerConfig<>();
         consumerConfig.setInterfaceClass(IHelloService.class);
         consumerConfig.setServiceVersion("v2");
@@ -37,6 +52,5 @@ public class WRPCConfig {
         consumerConfig.setAppName("consumer");
         return consumerConfig;
     }
-
 
 }
