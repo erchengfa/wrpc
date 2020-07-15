@@ -1,6 +1,7 @@
 package com.github.wang.wrpc.context.consumer;
 
 import com.github.wang.wrpc.common.exception.RPCRuntimeException;
+import com.github.wang.wrpc.common.utils.StringUtils;
 import com.github.wang.wrpc.context.common.GlobalExecutor;
 import com.github.wang.wrpc.context.common.Invocation;
 import com.github.wang.wrpc.context.config.ConsumerConfig;
@@ -9,102 +10,92 @@ import com.github.wang.wrpc.context.registry.ProviderInfo;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
 
-import javax.annotation.PostConstruct;
-import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.stream.Collectors;
 
 
 @Slf4j
 public class RpcInvokerHolder {
 
-    private static Map<String, RpcInvoker> aliveRpcInvokerMap = new ConcurrentHashMap<>();
-
-    private List<String> urls = new ArrayList<>();
-
-    private ProviderGroup providerGroup;
+    /**
+     * key:服务名 ----  value：该服务所有对应的Invoker列表
+     */
+    private static Map<String, List<RpcInvoker>> aliveRpcInvokerMap = new ConcurrentHashMap<>();
 
     private ConsumeApplicationContext context;
 
     public RpcInvokerHolder(ConsumeApplicationContext context) {
         this.context = context;
+        init();
     }
 
-    @PostConstruct
-    public void init(){
-        GlobalExecutor.registerTaskToTimer(()->{
-            for (String url : aliveRpcInvokerMap.keySet()){
-                RpcInvoker rpcInvoker = aliveRpcInvokerMap.get(url);
-                if(rpcInvoker.isDead()){
-                    log.error("RpcInvokerHolder dead rpc invoker:{}",rpcInvoker);
-                }else if (!rpcInvoker.isActive()){
-                    log.debug("wrpc aliveRpcInvokerMap check reconnect:{}",rpcInvoker);
-                    rpcInvoker.connect();
+    public void init() {
+        GlobalExecutor.registerTaskToTimer(() -> {
+            log.debug("aliveRpcInvokerMap:{}", aliveRpcInvokerMap);
+            for (String serviceName : aliveRpcInvokerMap.keySet()) {
+                List<RpcInvoker> list = aliveRpcInvokerMap.get(serviceName);
+                for (RpcInvoker rpcInvoker : list) {
+                    if (!rpcInvoker.isActive()) {
+                        log.debug("wrpc aliveRpcInvokerMap check reconnect:{}", rpcInvoker);
+                        GlobalExecutor.registerTaskToPool(() -> {
+                            rpcInvoker.connect();
+                        });
+                    }
                 }
             }
         });
     }
 
     public synchronized void refresh(ProviderGroup providerGroup) {
-        log.debug("rpc client poll refresh provider group:{}", providerGroup);
-        if (providerGroup == null){
+        if (providerGroup == null) {
+            return;
+        }
+        if (StringUtils.isEmpty(providerGroup.getServiceName())) {
             return;
         }
         List<ProviderInfo> providerInfos = providerGroup.getProviderInfos();
-        List<String> newUrls = new ArrayList<>();
-        removeRpcInvoker(providerInfos);
+        Map<ProviderInfo, RpcInvoker> rpcInvokerMap = getServiceRpcInvokerMap(providerGroup.getServiceName());
+
+        List<RpcInvoker> newRpcInvokerList = new CopyOnWriteArrayList<RpcInvoker>();
         for (ProviderInfo providerInfo : providerInfos) {
-            RpcInvoker rpcInvoker = aliveRpcInvokerMap.get(providerInfo.getUrl());
+            RpcInvoker rpcInvoker = rpcInvokerMap.get(providerInfo);
             if (rpcInvoker == null) {
-                rpcInvoker = new RpcInvoker(providerInfo,this);
-            }else{
+                rpcInvoker = new RpcInvoker(providerInfo, this);
+            } else {
                 rpcInvoker.updateProviderInfo(providerInfo);
             }
-            RpcInvoker finalRpcInvoker = rpcInvoker;
-            GlobalExecutor.registerTaskToPool(()->{
-                finalRpcInvoker.connect();
-                aliveRpcInvokerMap.put(providerInfo.getUrl(), finalRpcInvoker);
-            });
-            newUrls.add(providerInfo.getUrl());
+            rpcInvoker.connect();
+            newRpcInvokerList.add(rpcInvoker);
         }
-        this.urls = newUrls;
-        this.providerGroup = providerGroup;
-        log.info("rpc client poll refresh after:{},{},{}", this.providerGroup, this.urls);
+        aliveRpcInvokerMap.put(providerGroup.getServiceName(), newRpcInvokerList);
+        log.info("rpc client poll refresh after:{},{}", newRpcInvokerList);
     }
 
-    private void removeRpcInvoker(List<ProviderInfo> providerInfos) {
-        List<String> activeUrls = new ArrayList<>();
-        for (ProviderInfo providerInfo : providerInfos) {
-            activeUrls.add(providerInfo.getUrl());
-        }
-        if (CollectionUtils.isNotEmpty(urls)) {
-            for (String url : urls) {
-                if (!activeUrls.contains(url)) {
-                    aliveRpcInvokerMap.remove(url);
-                }
+    private Map<ProviderInfo, RpcInvoker> getServiceRpcInvokerMap(String serviceName) {
+        Map<ProviderInfo, RpcInvoker> rpcInvokerMap = new HashMap<>();
+        List<RpcInvoker> rpcInvokers = aliveRpcInvokerMap.get(serviceName);
+        if (CollectionUtils.isNotEmpty(rpcInvokers)) {
+            for (RpcInvoker rpcInvoker : rpcInvokers) {
+                rpcInvokerMap.put(rpcInvoker.getProviderInfo(), rpcInvoker);
             }
         }
+        return rpcInvokerMap;
     }
+
 
     public List<RpcInvoker> listRpckInvoker(Invocation invocation) {
-        if (CollectionUtils.isEmpty(urls)) {
-            throw new RPCRuntimeException(String.format("%s no active provider", context.getConsumerConfig().getServiceName()));
-        }
-        List<RpcInvoker> rpcInvokers = new ArrayList<>();
-        for (String url : urls) {
-            RpcInvoker rpcInvoker = aliveRpcInvokerMap.get(url);
-            if (rpcInvoker != null && rpcInvoker.isActive()) {
-                rpcInvokers.add(rpcInvoker);
-            }
-        }
+        List<RpcInvoker> rpcInvokers = aliveRpcInvokerMap.get(invocation.getServiceName());
         if (CollectionUtils.isEmpty(rpcInvokers)) {
             throw new RPCRuntimeException(String.format("%s no active provider", context.getConsumerConfig().getServiceName()));
         }
-        return rpcInvokers;
+        return rpcInvokers.stream().filter(item -> item.isActive()).collect(Collectors.toList());
     }
 
-    public ConsumerConfig getConsumerConfig(){
+    public ConsumerConfig getConsumerConfig() {
         return context.getConsumerConfig();
     }
 

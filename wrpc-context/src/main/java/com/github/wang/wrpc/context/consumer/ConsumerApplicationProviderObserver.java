@@ -16,6 +16,7 @@ public class ConsumerApplicationProviderObserver implements ProviderObserver {
 
     @Override
     public void update(ProviderGroup providerGroup) {
+        log.debug("ConsumerApplicationProviderObserver update:{}",providerGroup);
         rpcInvokerHolder.refresh(providerGroup);
     }
 

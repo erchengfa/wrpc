@@ -13,7 +13,7 @@ import java.io.IOException;
 public class TestProvider {
 
     @Test
-    public void test1() throws IOException {
+    public void provider1() throws IOException {
         //注册中心
         RegistryConfig registryConfig = new RegistryConfig();
         registryConfig.setProtocol("zookeeper");//协议
@@ -24,10 +24,9 @@ public class TestProvider {
         serverConfig.setPort(20801);        //设置端口
 
         ProviderConfig<IDemoService> providerConfig = new ProviderConfig<>();
-        providerConfig.setAppName("demo1");//设置应用名
+        providerConfig.setAppName("demo-service");//设置应用名
         providerConfig.setInterfaceClass(IDemoService.class);//设置接口类
         providerConfig.setServiceBean(new DemoServiceImpl());//设置服务实现类
-        providerConfig.setServiceVersion("1.0");
         providerConfig.setServer(serverConfig);//设置服务
         providerConfig.setRegistry(registryConfig);//设置注册中心
         providerConfig.export();//暴露服务
@@ -36,7 +35,7 @@ public class TestProvider {
     }
 
     @Test
-    public void test2() throws IOException {
+    public void provider2() throws IOException {
         RegistryConfig registryConfig = new RegistryConfig();
         registryConfig.setProtocol("zookeeper");
         registryConfig.setAddress("118.89.196.99:2181");
@@ -44,7 +43,7 @@ public class TestProvider {
         ServerConfig serverConfig = new ServerConfig();
         serverConfig.setPort(20802);
         ProviderConfig<IDemoService> providerConfig = new ProviderConfig<>();
-        providerConfig.setAppName("demo2");
+        providerConfig.setAppName("demo-service");
         providerConfig.setInterfaceClass(IDemoService.class);
         providerConfig.setServiceBean(new DemoServiceImpl());
         providerConfig.setServer(serverConfig);

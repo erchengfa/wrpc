@@ -7,7 +7,7 @@ import java.util.concurrent.*;
 public class GlobalExecutor {
 
     //rpc invoker 是否活跃状态检查时间间隔
-    private static final long ALIVE_RPC_INVOKER_CHECK_TIME = 1000 * 30;
+    private static final long ALIVE_RPC_INVOKER_CHECK_TIME = 1000 * 5;
 
     private static ScheduledExecutorService timer =
             new ScheduledThreadPoolExecutor(Runtime.getRuntime().availableProcessors(), new ThreadFactory() {
@@ -22,7 +22,7 @@ public class GlobalExecutor {
                 }
             });
 
-    private static ThreadPoolExecutor threadPoolExecutor = ThreadPoolUtils.newFixedThreadPool(Runtime.getRuntime().availableProcessors(), ThreadPoolUtils.buildQueue(64),
+    private static ThreadPoolExecutor threadPoolExecutor = ThreadPoolUtils.newFixedThreadPool(Runtime.getRuntime().availableProcessors(), ThreadPoolUtils.buildQueue(1024),
             Executors.defaultThreadFactory(), new ThreadPoolExecutor.CallerRunsPolicy());//
 
     public static void registerTaskToTimer(Runnable runnable) {

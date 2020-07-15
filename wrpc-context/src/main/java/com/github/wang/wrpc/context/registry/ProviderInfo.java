@@ -41,5 +41,30 @@ public class ProviderInfo implements Serializable {
         return JSONUtils.toJSONString(providerInfo).getBytes();
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        ProviderInfo that = (ProviderInfo) o;
+        if (host != null ? !host.equals(that.host) : that.host != null) {
+            return false;
+        }
+        if (port != that.port) {
+            return false;
+        }
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = protocol.hashCode();
+        result = 31 * result + (host == null ? 0 : host.hashCode());
+        result = 31 * result + (port == null ? 0 : port.hashCode());
+        return result;
+    }
 
 }

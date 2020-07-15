@@ -24,17 +24,17 @@ public class RpcInvoker implements Invoker {
 
     private RpcInvokerHolder rpcInvokerHolder;
 
-    public RpcInvoker(ProviderInfo providerInfo,RpcInvokerHolder rpcInvokerHolder) {
+    public RpcInvoker(ProviderInfo providerInfo, RpcInvokerHolder rpcInvokerHolder) {
         this.providerInfo = providerInfo;
         this.rpcInvokerHolder = rpcInvokerHolder;
         this.rpcClient = new NettyClient(providerInfo);
     }
 
-    public void updateProviderInfo(ProviderInfo providerInfo){
+    public void updateProviderInfo(ProviderInfo providerInfo) {
         this.providerInfo = providerInfo;
     }
 
-    public  void connect() {
+    public void connect() {
         try {
             rpcClient.connect();
         } catch (Throwable e) {
@@ -93,16 +93,21 @@ public class RpcInvoker implements Invoker {
         return providerInfo.getWeight();
     }
 
+    public ProviderInfo getProviderInfo() {
+        return providerInfo;
+    }
+
     public boolean isActive() {
 
         return rpcClient.isActive();
     }
 
-    public boolean isDead() {
-        return rpcClient.isDead();
+    private ConsumerConfig getConsumerConfig() {
+        return rpcInvokerHolder.getConsumerConfig();
     }
 
-    private ConsumerConfig getConsumerConfig(){
-        return rpcInvokerHolder.getConsumerConfig();
+    @Override
+    public String toString() {
+        return providerInfo.toString();
     }
 }

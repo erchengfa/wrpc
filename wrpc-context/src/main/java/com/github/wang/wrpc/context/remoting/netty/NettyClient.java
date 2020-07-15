@@ -31,9 +31,9 @@ import static java.util.concurrent.TimeUnit.MILLISECONDS;
 @Slf4j
 public class NettyClient implements RpcClient {
 
-    private static final int CONNECT_TIMEOUT = 5000;
+    private static final int CONNECT_TIMEOUT = 1000 * 5;
 
-    private static final int RECONNECT_COUNT_LIMIT = 10;
+    private static final int RECONNECT_COUNT_LIMIT = 10; //连接失败次数限制,如果超过该次就不再进行重连
 
     private static final int HEARTBEAT_COUNT_LIMIT = 3;
 
@@ -51,19 +51,17 @@ public class NettyClient implements RpcClient {
 
     private AtomicInteger connectionCount = new AtomicInteger(0);
 
-    private volatile boolean isOpen = false;
-
-    public NettyClient(ProviderInfo providerInfo){
+    public NettyClient(ProviderInfo providerInfo) {
         this.providerInfo = providerInfo;
-        this.inetSocketAddress = new InetSocketAddress(providerInfo.getHost(),providerInfo.getPort());
+        this.inetSocketAddress = new InetSocketAddress(providerInfo.getHost(), providerInfo.getPort());
 
     }
 
-    public synchronized void connect(){
-        if (isActive()){
+    public synchronized void connect() {
+        if (isActive()) {
             return;
         }
-        connectionCount.incrementAndGet();
+        connectionCount.incrementAndGet(); //连接次数记录
         final NettyClientHandler nettyClientHandler = new NettyClientHandler(this);
         bootstrap = new Bootstrap();
         bootstrap.group(nioEventLoopGroup)
@@ -112,19 +110,14 @@ public class NettyClient implements RpcClient {
                 // Close old channel
                 Channel oldChannel = NettyClient.this.channel; // copy reference
                 if (oldChannel != null) {
-                    try {
-                        if (log.isInfoEnabled()) {
-                            log.info("Close old netty channel " + oldChannel + " on create new netty channel " + newChannel);
-                        }
-                        oldChannel.close();
-                    } finally {
-                        //移除掉channel
+                    if (log.isInfoEnabled()) {
+                        log.info("Close old netty channel " + oldChannel + " on create new netty channel " + newChannel);
                     }
+                    oldChannel.close();
                 }
-            }finally {
-                connectionCount.set(0);
+            } finally {
+                connectionCount.set(0); //将连接次数清零
                 NettyClient.this.channel = newChannel;
-                isOpen = true;
             }
 
         } else if (future.cause() != null) {
@@ -134,39 +127,30 @@ public class NettyClient implements RpcClient {
         }
     }
 
-    public void send(Object message){
+    public void send(Object message) {
         channel.writeAndFlush(message);
     }
 
-    public ProviderInfo getProviderInfo(){
+    public ProviderInfo getProviderInfo() {
         return this.providerInfo;
     }
 
-    public void receiveHeartbeat(){
+    public void receiveHeartbeat() {
         heartBeatFailCount.set(0);
     }
 
-    public void handleHeartBeatException(){
+    public void handleHeartBeatException() {
         int times = heartBeatFailCount.incrementAndGet();
-        if (times >= HEARTBEAT_COUNT_LIMIT){//心跳发送失败超过三次
-            isOpen = false;
-            //this.connect();
+        if (times > HEARTBEAT_COUNT_LIMIT) {//心跳发送失败超过一定的限度
+            log.error("心跳发送失败超过一定的限度:{}", providerInfo);
+            channel.close(); //关闭连接
+            heartBeatFailCount.set(0);//设置心跳次数为0
         }
-    }
-
-    public boolean isDead(){
-        if (isActive()){
-            return false;
-        }
-        if (connectionCount.get() <= RECONNECT_COUNT_LIMIT){
-            return false;
-        }
-        return true;
     }
 
     @Override
-    public boolean isActive(){
-        return isOpen && channel.isActive();
+    public boolean isActive() {
+        return channel.isActive();
     }
 
 }
