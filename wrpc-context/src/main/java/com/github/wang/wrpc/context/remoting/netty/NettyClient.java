@@ -145,11 +145,15 @@ public class NettyClient implements RpcClient {
             log.error("心跳发送失败超过一定的限度:{}", providerInfo);
             channel.close(); //关闭连接
             heartBeatFailCount.set(0);//设置心跳次数为0
+            this.connect();
         }
     }
 
     @Override
     public boolean isActive() {
+        if (channel == null){
+            return false;
+        }
         return channel.isActive();
     }
 

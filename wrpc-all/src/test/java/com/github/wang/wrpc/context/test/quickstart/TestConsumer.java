@@ -22,13 +22,12 @@ public class TestConsumer {
         consumerConfig.setAppName("consumer");//设置应用程序
         IDemoService iDemoService = consumerConfig.refer();//获取远程代理类
         while (true){
-//            try {
-//                System.out.println(iDemoService.sayHello("wang"));
-//                //Thread.sleep(1000);
-//            }catch (Exception e){
-//
-//            }
+            try {
+                System.out.println(iDemoService.sayHello("wang"));
+                //Thread.sleep(1000);
+            }catch (Exception e){
 
+            }
         }
 //        System.in.read();
     }

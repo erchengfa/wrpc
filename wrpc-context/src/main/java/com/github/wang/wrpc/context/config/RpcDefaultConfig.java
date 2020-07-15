@@ -79,7 +79,7 @@ public class RpcDefaultConfig {
     /**
      * 服务调用超时时间
      */
-    public static final long SERVICE_INVOKE_TIMEOUT = 10000L;
+    public static final long SERVICE_INVOKE_TIMEOUT = 1000L * 10;
 
 
 }

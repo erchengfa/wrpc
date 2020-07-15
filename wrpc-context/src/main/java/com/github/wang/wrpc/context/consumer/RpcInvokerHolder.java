@@ -28,12 +28,16 @@ public class RpcInvokerHolder {
 
     private ConsumeApplicationContext context;
 
+    static {
+        init();
+    }
+
     public RpcInvokerHolder(ConsumeApplicationContext context) {
         this.context = context;
         init();
     }
 
-    public void init() {
+    public static void init() {
         GlobalExecutor.registerTaskToTimer(() -> {
             log.debug("aliveRpcInvokerMap:{}", aliveRpcInvokerMap);
             for (String serviceName : aliveRpcInvokerMap.keySet()) {
