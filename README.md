@@ -1,4 +1,4 @@
-# wrpc
+# 概述
 
 一个轻量级rpc框架：
 
@@ -18,54 +18,102 @@
 
 
 
+# 添加依赖
 
-
-
-
-
-
-java api
-
-暴露服务
+安装到mvn仓库
 
 ```java
-        //注册中心
-        RegistryConfig registryConfig = new RegistryConfig();
-        registryConfig.setProtocol("zookeeper");//协议
-        registryConfig.setAddress("118.89.196.99:2181");//注册中心地址
-        //配置服务
-        ServerConfig serverConfig = new ServerConfig();
-        serverConfig.setPort(20801);        //设置端口
-        ProviderConfig<IDemoService> providerConfig = new ProviderConfig<>();
-        providerConfig.setAppName("demo1");//设置应用名
-        providerConfig.setInterfaceClass(IDemoService.class);//设置接口类
-        providerConfig.setServiceBean(new DemoServiceImpl());//设置服务实现类
-        providerConfig.setServer(serverConfig);//设置服务
-        providerConfig.setRegistry(registryConfig);//设置注册中心
-        providerConfig.export();//暴露服务
-```
+git clone https://gitee.com/wang-hello/wrpc.git
+mvn clean install
 
-消费服务
-
-```java
-        //注册中心
-        RegistryConfig registryConfig = new RegistryConfig();
-        registryConfig.setProtocol("zookeeper");//协议
-        registryConfig.setAddress("118.89.196.99:2181");//注册中心地址
-        ConsumerConfig<IDemoService> consumerConfig = new ConsumerConfig<>();
-        consumerConfig.setInterfaceClass(IDemoService.class);//设置接口类
-        consumerConfig.setRegistry(registryConfig);//设置注册中心
-        consumerConfig.setAppName("consumer");//设置应用程序
-        IDemoService iDemoService = consumerConfig.refer();//获取远程代理类
-        while (true){
-            try {
-                System.out.println(iDemoService.sayHello("wang"));
-                Thread.sleep(1000);
-            }catch (Exception e){
-            }
-        }
 ```
 
 
 
-springboot 示例在wcp-example下。
+添加依赖
+
+```
+<dependency>
+    <groupId>com.github.wang.wrpc</groupId>
+    <artifactId>wrpc-boot-starter</artifactId>
+    <version>${wrpc.version}</version>
+</dependency>
+```
+
+
+
+# springboot 使用
+
+## 服务提供者
+
+配置：
+
+```yaml
+wrpc.enabled=true #开启wrpc
+wrpc.appName=demo-provider # 应用名称
+wrpc.registry.address=127.0.0.1:2181 # 注册中心地址
+wrpc.registry.protocol=zookeeper # 注册中心协议 
+wrpc.server.protocol=wang #wrpc协议
+wrpc.server.port=20800 # wrpc监听端口
+```
+
+暴露服务:@RpcService(value = IHelloService.class)注解标识，value为服务接口类。
+
+```java
+@RpcService(value = IHelloService.class)
+public class HelloService1 implements IHelloService {
+    @Override
+    public String sayHello(String name) {
+        return "welcome " + name;
+    }
+}
+```
+
+添加版本:下面指定版本号为v2
+
+```java
+@RpcService(value = IHelloService.class,version = "v2")
+public class HelloService2 implements IHelloService {
+    @Override
+    public String sayHello(String name) {
+        return "welcome v2 " + name;
+    }
+}
+```
+
+
+
+## 服务消费者
+
+配置
+
+```java
+wrpc.enabled=true
+wrpc.appName=demo-consumer
+wrpc.registry.address=127.0.0.1:2181
+wrpc.registry.protocol=zookeeper
+```
+
+采用@RpcReference注入rpc服务
+
+```java
+@RestController
+public class HelloController {
+    @RpcReference
+    private IHelloService iHelloService;
+    @RpcReference(version = "v2")
+    private IHelloService iHelloServiceV2;
+
+    @GetMapping("/say-hello")
+    public String syaHello() {
+        return iHelloService.sayHello("wrpc");
+    }
+
+    @GetMapping("/say-hello-v2")
+    public String syaHelloV2() {
+        return iHelloServiceV2.sayHello("wrpc");
+    }
+
+}
+```
+

@@ -8,20 +8,18 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 public class HelloController {
-
     @RpcReference
-    IHelloService iHelloService;
-
+    private IHelloService iHelloService;
     @RpcReference(version = "v2")
-    IHelloService iHelloServiceV2;
+    private IHelloService iHelloServiceV2;
 
     @GetMapping("/say-hello")
-    public String syaHello(){
+    public String syaHello() {
         return iHelloService.sayHello("wrpc");
     }
 
     @GetMapping("/say-hello-v2")
-    public String syaHelloV2(){
+    public String syaHelloV2() {
         return iHelloServiceV2.sayHello("wrpc");
     }
 
