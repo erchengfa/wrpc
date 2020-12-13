@@ -31,6 +31,7 @@ import org.apache.zookeeper.CreateMode;
 import org.apache.zookeeper.KeeperException;
 import org.apache.zookeeper.ZooDefs;
 import org.apache.zookeeper.data.ACL;
+import org.apache.zookeeper.data.Stat;
 
 import java.net.URLEncoder;
 import java.util.ArrayList;
@@ -178,6 +179,7 @@ public class ZookeeperRegistry extends Registry {
                 getAndCheckZkClient().create().creatingParentContainersIfNeeded()
                         .withMode(CreateMode.EPHEMERAL) // 临时节点
                         .forPath(providerUrl, providerInfo.convertData()); //节点 + 动态变更的数据
+
             }
         } catch (Exception e) {
             throw new RPCRuntimeException("Failed register to zookeeper", e);

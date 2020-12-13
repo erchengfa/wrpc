@@ -14,11 +14,17 @@
 
 6、负载均衡：random（加权随机）、roundrobin（轮训）
 
-7、注册中心支持：zookeeper、nacos
+7、注册中心支持：zookeeper【版本： 3.5.7】、nacos【版本： 1.3.1】
 
 
 
-快速开始：
+
+
+
+
+
+
+java api
 
 暴露服务
 

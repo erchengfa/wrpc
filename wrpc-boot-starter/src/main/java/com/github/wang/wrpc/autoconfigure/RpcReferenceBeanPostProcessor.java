@@ -1,7 +1,6 @@
 package com.github.wang.wrpc.autoconfigure;
 
 import com.github.wang.wrpc.autoconfigure.annotation.RpcReference;
-import com.github.wang.wrpc.common.utils.StringUtils;
 import com.github.wang.wrpc.context.config.ConsumerConfig;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeansException;
@@ -10,17 +9,20 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 
 import java.lang.reflect.Field;
-import java.util.HashSet;
-import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 
 @Slf4j
 public class RpcReferenceBeanPostProcessor implements BeanPostProcessor, ApplicationContextAware {
 
+    private WRPCProperties wrpcProperties;
+
     private ApplicationContext applicationContext;
 
-    private ConcurrentHashMap<String,ConsumerConfig> consumerConfigConcurrentHashMap = new ConcurrentHashMap<>();
+    public RpcReferenceBeanPostProcessor(WRPCProperties wrpcProperties) {
+        this.wrpcProperties = wrpcProperties;
+    }
+
     /**
      * 给有RpcReference注解的属性 注入远程调用代理类
      * @param bean
@@ -42,12 +44,14 @@ public class RpcReferenceBeanPostProcessor implements BeanPostProcessor, Applica
             RpcReference rpcReference = field.getAnnotation(RpcReference.class);
             String version = rpcReference.version();
             field.setAccessible(true);
-            String serviceName = fieldType.getName();
-            if (StringUtils.isNotBlank(version)){
-                serviceName = serviceName + "-" + version;
-            }
+
+            ConsumerConfig consumerConfig = new ConsumerConfig();
+            consumerConfig.setAppName(wrpcProperties.getAppName());
+            consumerConfig.setRegistry(wrpcProperties.getRegistry());
+            consumerConfig.setInterfaceClass(fieldType);
+            consumerConfig.setServiceVersion(version);
             try {
-                field.set(bean, consumerConfigConcurrentHashMap.get(serviceName).refer());
+                field.set(bean, consumerConfig.refer());
             } catch (IllegalAccessException e) {
                 log.error("wrpc error:", e);
             }
@@ -58,10 +62,5 @@ public class RpcReferenceBeanPostProcessor implements BeanPostProcessor, Applica
     @Override
     public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
         this.applicationContext = applicationContext;
-        Map<String, ConsumerConfig> consumerConfigMap = applicationContext.getBeansOfType(ConsumerConfig.class);
-        for (ConsumerConfig consumerConfig: new HashSet<>(consumerConfigMap.values())){
-            consumerConfigConcurrentHashMap.put(consumerConfig.getServiceName(),consumerConfig);
-        }
-
     }
 }
