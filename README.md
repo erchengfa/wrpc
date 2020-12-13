@@ -23,7 +23,7 @@
 安装到mvn仓库
 
 ```java
-git clone https://gitee.com/wang-hello/wrpc.git
+git clone https://github.com/wang-hello/wrpc.git
 mvn clean install
 
 ```
