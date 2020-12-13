@@ -46,7 +46,7 @@ mvn clean install
 
 ## 服务提供者
 
-配置：
+application.properties配置：
 
 ```yaml
 wrpc.enabled=true #开启wrpc
@@ -85,7 +85,7 @@ public class HelloService2 implements IHelloService {
 
 ## 服务消费者
 
-配置
+application.properties配置
 
 ```java
 wrpc.enabled=true
@@ -117,3 +117,6 @@ public class HelloController {
 }
 ```
 
+
+
+详细示例代码wrpc-example，示例采用nacos作为注册中心。
