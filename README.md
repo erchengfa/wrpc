@@ -18,6 +18,30 @@
 
 
 
+wang 协议（参考了Dubbo协议）：
+
+![1615973355664](doc\1615973355664.png)
+
+Magic（16bit）：协议标识
+
+Req/Res (1 bit) ：标识是请求或响应。请求： 1; 响应： 0。
+
+Heartbeat(1 bit) ：是否是心跳。
+
+Back（1bit）：是否返回结果值
+
+SId (5 bit) ：标识采用哪种序列化方式
+
+Request ID (64 bits) ：请求的唯一id
+
+Body Length (32 bits) ：消息体长度
+
+Body：消息体
+
+
+
+
+
 # 添加依赖
 
 安装到mvn仓库
